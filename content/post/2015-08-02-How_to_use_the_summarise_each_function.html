@@ -1,0 +1,142 @@
+---
+title: '[R] dplyr 패키지의 _at 함수들'
+date: 2015-08-02
+categories:
+  - R
+tags:
+  - dplyr
+  - R
+slug: How_to_use_the_summarise_at_function
+---
+
+
+
+<div class="section level2">
+<h2>시작하며</h2>
+<p>요즘 R에서 이루어지는 대부분의 데이터 전처리에 <code>dplyr</code> 패키지를 이용하고 있다.</p>
+<p>보통 간단한 집계나 기초통계량은 함수 <code>summarise()</code>를 이용하여 새로운 데이터 프레임을 만들거나, 함수 <code>mutate()</code> 함수를 이용하여 기존 데이터 프레임에 새로운 열을 추가하곤 한다. 이때 하나의 변수에 대한 처리는 앞 두 함수를 쓰면 문제가 없는데 두 개 이상의 변수에 대한 처리에 유용하게 쓸 수 있는 함수가 있으니 바로 <code>summarise_at()</code>와 <code>mutate_at()</code> 이다.</p>
+<p><code>dplyr</code> 패키지가 세상에 처음 모습을 드러냈을 때는 없었던 함수라 <a href="http://wsyang.com/2014/02/introduction-to-dplyr/">패키지 소개 글</a>에는 빠져 있으니 이번 기회에 정리해 보자.</p>
+</div>
+<div id="summarise_at-" class="section level2">
+<h2>summarise_at()의 사용법</h2>
+<p>예를 들어 다음과 같이 하나의 변수에 대해 복수의 통계치를 구한다 하자.</p>
+<pre class="r"><code>&gt; library(dplyr)
+&gt; iris %&gt;% group_by(Species) %&gt;% 
++   summarise(min.sl=min(Sepal.Length),
++   mean.sl=mean(Sepal.Length),
++   median.sl=median(Sepal.Length),
++   max.sl=max(Sepal.Length))</code></pre>
+<pre><code>#&gt; # A tibble: 3 x 5
+#&gt;   Species    min.sl mean.sl median.sl max.sl
+#&gt;   &lt;fctr&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1 setosa       4.30    5.01      5.00   5.80
+#&gt; 2 versicolor   4.90    5.94      5.90   7.00
+#&gt; 3 virginica    4.90    6.59      6.50   7.90</code></pre>
+<p>하나의 변수라면 이 정도야 하고 넘어가겠지만, 이것이 여러 변수에 같은 처리를 하고자 하면 갑자기 암울해 지고 일하기 싫어지기 마련이다.</p>
+<pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
++   summarise(min.sl=min(Sepal.Length),
++             mean.sl=mean(Sepal.Length),
++             median.sl=median(Sepal.Length),
++             max.sl=max(Sepal.Length),
++             min.sw=min(Sepal.Width),
++             mean.sw=mean(Sepal.Width),
++             median.sw=median(Sepal.Width),
++             max.sw=max(Sepal.Width)) </code></pre>
+<pre><code>#&gt; # A tibble: 3 x 9
+#&gt;   Species    min.sl mean.sl median.sl max.sl min.sw mean.sw median.… max.…
+#&gt;   &lt;fctr&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 setosa       4.30    5.01      5.00   5.80   2.30    3.43     3.40  4.40
+#&gt; 2 versicolor   4.90    5.94      5.90   7.00   2.00    2.77     2.80  3.40
+#&gt; 3 virginica    4.90    6.59      6.50   7.90   2.20    2.97     3.00  3.80</code></pre>
+<p>요즘 우리나라 언론에서 절찬리에 사용되고 있는 Copy &amp; Paste 기술을 시전하여 변수명만 바꾸면 되겠지만, 이것도 중간에 빼먹고 바꾸지 않은 변수가 섞여 있기도 쉽고 일단 하다 보면 귀찮다. 이럴 때 함수 <code>summarise_at()</code>를 이용하면 간단하게 처리할 수 있다.</p>
+<pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
++   summarise_at(vars(Sepal.Length, Sepal.Width), funs(min, mean, median, max))</code></pre>
+<pre><code>#&gt; # A tibble: 3 x 9
+#&gt;   Species    Sepal.Length_min Sepal… Sepal… Sepal… Sepa… Sepa… Sepa… Sepa…
+#&gt;   &lt;fctr&gt;                &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 setosa                 4.30   2.30   5.01   3.43  5.00  3.40  5.80  4.40
+#&gt; 2 versicolor             4.90   2.00   5.94   2.77  5.90  2.80  7.00  3.40
+#&gt; 3 virginica              4.90   2.20   6.59   2.97  6.50  3.00  7.90  3.80</code></pre>
+<p>함수 <code>summarise_at()</code>의 첫번째 인자에 대상이 되는 변수를 나열하고, 구하고 싶은 함수를 <code>funs()</code>안에 넣으면 된다.</p>
+<div id="mutate_at-" class="section level3">
+<h3>mutate_at() 사용법</h3>
+<p>iris 데이터에서 종별로 순위(rank) 및 percentile을 구해 원 데이터에 새로운 변수로 추가하고 싶다면</p>
+<pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
++   mutate_at(vars(Sepal.Length, Sepal.Width), funs(min_rank, cume_dist))</code></pre>
+<pre><code>#&gt; # A tibble: 150 x 9
+#&gt; # Groups: Species [3]
+#&gt;    Sepal.Length Sepal.Width Petal… Petal… Speci… Sepa… Sepa… Sepal… Sepal…
+#&gt;           &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;fctr&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1         5.10        3.50   1.40  0.200 setosa    29    29 0.720  0.680 
+#&gt;  2         4.90        3.00   1.40  0.200 setosa    17     3 0.400  0.160 
+#&gt;  3         4.70        3.20   1.30  0.200 setosa    10    13 0.220  0.340 
+#&gt;  4         4.60        3.10   1.50  0.200 setosa     6     9 0.180  0.240 
+#&gt;  5         5.00        3.60   1.40  0.200 setosa    21    35 0.560  0.740 
+#&gt;  6         5.40        3.90   1.70  0.400 setosa    41    45 0.900  0.920 
+#&gt;  7         4.60        3.40   1.40  0.300 setosa     6    20 0.180  0.560 
+#&gt;  8         5.00        3.40   1.50  0.200 setosa    21    20 0.560  0.560 
+#&gt;  9         4.40        2.90   1.40  0.200 setosa     2     2 0.0800 0.0400
+#&gt; 10         4.90        3.10   1.50  0.100 setosa    17     9 0.400  0.240 
+#&gt; # ... with 140 more rows</code></pre>
+</div>
+<div id="-tips" class="section level3">
+<h3>추가 Tips</h3>
+<p>위 예에서 선택한 변수는 모두 <em>Sepal</em>이라는 문자열로 시작한다. 또한, iris 데이터의 다른 변수는 <em>Sepal</em>로 시작하지 않는다.</p>
+<pre class="r"><code>names(iris)</code></pre>
+<pre><code>#&gt; [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot; 
+#&gt; [5] &quot;Species&quot;</code></pre>
+<p>따라서 함수 <code>starts_with()</code>를 이용하여 다음과 같이 처리할 수도 있다.</p>
+<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% 
+  summarise_at(vars(starts_with(&quot;Sepal&quot;)), funs(min, mean, median, max))</code></pre>
+<pre><code>#&gt; # A tibble: 3 x 9
+#&gt;   Species    Sepal.Length_min Sepal… Sepal… Sepal… Sepa… Sepa… Sepa… Sepa…
+#&gt;   &lt;fctr&gt;                &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 setosa                 4.30   2.30   5.01   3.43  5.00  3.40  5.80  4.40
+#&gt; 2 versicolor             4.90   2.00   5.94   2.77  5.90  2.80  7.00  3.40
+#&gt; 3 virginica              4.90   2.20   6.59   2.97  6.50  3.00  7.90  3.80</code></pre>
+<p>함수 <code>starts_with()</code>와 함께 알아두면 좋을 함수는 다음과 같은 것들이 있다. 단, 이하 함수 군은 <code>select()</code>, <code>summarise_at()</code>, <code>mutate_at()</code> 함수 안에서만 사용할 수 있으니 주의해야 한다.</p>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>함수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>starts_with(x)</td>
+<td>x로 시작하는 변수만 선택. ignore.case = TRUE를 추가하면 대소문자를 구별하지 않음</td>
+</tr>
+<tr class="even">
+<td>ends_with(x)</td>
+<td>x로 끝나는 변수만 선택</td>
+</tr>
+<tr class="odd">
+<td>contains(x)</td>
+<td>x를 포함하는 변수를 선택</td>
+</tr>
+<tr class="even">
+<td>matches(x)</td>
+<td>정규표현 x에 대응하는 변수 선택</td>
+</tr>
+<tr class="odd">
+<td>num_range(“x”, 1:5, width = 2)</td>
+<td>문자열과 숫자의 조합으로 변수 선택. width는 앞에 0을 붙인 자리수. 이 예에서는 x01부터 x05를 선택</td>
+</tr>
+<tr class="even">
+<td>one_of(“x”, “y”, “z”)</td>
+<td>“x”, “y”, “z” 중 어느 하나라도 해당하는 변수를 선택</td>
+</tr>
+<tr class="odd">
+<td>everything</td>
+<td>모든 변수를 선택</td>
+</tr>
+</tbody>
+</table>
+<p>정규표현식에 자신이 있는 사람은 변수명 선택에 대단한 효율성을 가지게 될 것 같다. (여기서도 결론은 정규표현식인가…) 아무튼 나같이 영타가 느리고 귀찮은 것 싫어하는 사람에게 <code>_at()</code> 함수의 도입은 감사할 따름이다. 땡큐 <a href="http://priceonomics.com/hadley-wickham-the-man-who-revolutionized-r/?utm_campaign=Data%2BElixir&amp;utm_medium=email&amp;utm_source=Data_Elixir_46">Hadley Wickham</a>!!</p>
+</div>
+</div>

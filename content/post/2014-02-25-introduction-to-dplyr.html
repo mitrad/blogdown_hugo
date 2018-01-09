@@ -1,0 +1,322 @@
+---
+title: '[R] 데이터 처리의 새로운 강자, dplyr 패키지'
+date: 2014-02-25
+categories:
+  - R-Tips
+tags:
+  - dplyr
+  - R
+slug: introduction-to-dplyr
+---
+
+
+
+<p>데이터 분석에서 가장 많은 시간을 차지하는 것은 데이터를 분석에 필요한 형태로 만드는 데이터 전처리 과정입니다. 우리가 공부하면서 보게 되는 책에 있는 예제는 말 그대로 예제일 뿐이지 실제 데이터 분석 업무에서는 바로 모델링이나 시각화에 적합한 형태의 데이터를 얻기 위해서는 지루하고 복잡한 과정을 거치게 됩니다. 데이터 분석 프로젝트에 걸리는 시간의 절반 이상은 데이터의 전처리, 변환, 필터링이 차지하게 되는 것이 보통입니다.</p>
+<p>R 언어 자체에도 데이터 전처리를 위한 많은 함수가 포함되어 있습니다. 여기에 각종 패키지의 도움을 받는다면 더욱 쉽고 빠르게 전처리 과정을 마칠 수가 있습니다. 이번 포스팅에서는 최근 <code>dplyr</code>이라는 패키지가 새로 발표되어 인터넷상에서 좋은 평가를 받고 있기에 패키지 안에 포함된 예제를 이용하여 기본 사용법을 정리해 보도록 하겠습니다.</p>
+<div id="dplyr-" class="section level2">
+<h2>dplyr 패키지?</h2>
+<p>dplyr 패키지는 Hadley Wickham가 작성한 데이터 처리에 특화된 R 패키지입니다. 이 분이 지금까지 작성한 유명한 R 패키지로는 <code>ggplot2</code>, <code>plyr</code>, <code>reshape2</code>등이 있으며 이미 많은 분들이 사용하고 있으리라 생각합니다.</p>
+<p>데이터 처리에 특화된 유용한 패키지로는 역시 Hadley Wickham이 만든 <code>plyr</code>이라는 패키지가 있었습니다. 그러나 <code>plyr</code>은 편리하긴 했지만 모든 함수가 R로 작성되어서 처리 속도가 느리다는 단점이 있었습니다. 이에 반해 <code>dplyr</code>은 C++로 작성되어 불필요한 함수를 불러오지 않기 때문에 매우 빠른 처리 속도를 자랑합니다.</p>
+<p>dplyr 패키지는 데이터 프레임을 처리하는 함수군으로 구성되어 있습니다. 하지만 그 밖에도 다음 형식의 데이터를 이용할 수 있습니다.</p>
+<ul>
+<li>data.table : data.table 패키지와 사용</li>
+<li>각종 데이터베이스 : 현재 MySQL, PostgreSQL, SQLite, BigQuery를 지원</li>
+<li>데이터 큐브 : dplyr 패키지 내부에 실험적으로 내장됨</li>
+</ul>
+</div>
+<div id="dplyr--" class="section level2">
+<h2>dplyr 패키지 사용법</h2>
+<p>먼저 포스팅에서 소개할 <code>dplyr</code> 패키지와 데이터 셋 <code>hflight</code>를 설치하고 함수 <code>library()</code>를 이용해 함수군 및 데이터를 불러옵니다.</p>
+<pre class="r"><code>&gt; install.packages(c(&quot;dplyr&quot;, &quot;hflights&quot;))</code></pre>
+<pre class="r"><code>&gt; library(dplyr)
+&gt; library(hflights)</code></pre>
+<p>dplyr 패키지의 기본이 되는 것은 다음 5개 함수입니다.</p>
+<table>
+<thead>
+<tr class="header">
+<th>함수명</th>
+<th>내용</th>
+<th>유사함수</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>filter()</td>
+<td>지정한 조건식에 맞는 데이터 추출</td>
+<td>subset()</td>
+</tr>
+<tr class="even">
+<td>select()</td>
+<td>열의 추출</td>
+<td>data[, c(“Year”, “Month”)]</td>
+</tr>
+<tr class="odd">
+<td>mutate()</td>
+<td>열 추가</td>
+<td>transform()</td>
+</tr>
+<tr class="even">
+<td>arrange()</td>
+<td>정렬</td>
+<td>order(), sort()</td>
+</tr>
+<tr class="odd">
+<td>summarise()</td>
+<td>집계</td>
+<td>aggregate()</td>
+</tr>
+</tbody>
+</table>
+<p>여기에 <code>group_by()</code> 함수를 추가로 이용하면 그룹별로 다양한 집계를 할 수 있습니다.</p>
+<p>예제에 사용된 데이터는 미국 휴스턴에서 출발하는 모든 비행기의 2011년 이착륙기록이 수록된 것으로 227,496건의 이착륙기록에 대해 21개 항목을 수집한 데이터입니다.</p>
+<pre class="r"><code>&gt; dim(hflights)</code></pre>
+<pre><code>#&gt; [1] 227496     21</code></pre>
+<p>hflights 데이터는 관측치의 수가 많기 때문에 <code>tbl_df</code> 형식으로 변환해서 사용하는 것을 추천합니다.</p>
+<pre class="r"><code>&gt; hflights_df &lt;- tbl_df(hflights)
+&gt; hflights_df</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;  * &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011     1     1     6  1400  1500 AA      428 N576…    60    40   -10
+#&gt;  2  2011     1     2     7  1401  1501 AA      428 N557…    60    45   - 9
+#&gt;  3  2011     1     3     1  1352  1502 AA      428 N541…    70    48   - 8
+#&gt;  4  2011     1     4     2  1403  1513 AA      428 N403…    70    39     3
+#&gt;  5  2011     1     5     3  1405  1507 AA      428 N492…    62    44   - 3
+#&gt;  6  2011     1     6     4  1359  1503 AA      428 N262…    64    45   - 7
+#&gt;  7  2011     1     7     5  1359  1509 AA      428 N493…    70    43   - 1
+#&gt;  8  2011     1     8     6  1355  1454 AA      428 N477…    59    40   -16
+#&gt;  9  2011     1     9     7  1443  1554 AA      428 N476…    71    41    44
+#&gt; 10  2011     1    10     1  1443  1553 AA      428 N504…    70    45    43
+#&gt; # ... with 227,486 more rows, and 9 more variables: DepDelay &lt;int&gt;, Origin
+#&gt; #   &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+<p>이렇게 하면 모든 데이터를 화면에 출력하는 실수를 방지할 수 있습니다.</p>
+<div id="-filter---" class="section level3">
+<h3>함수 filter()를 이용한 데이터 추출</h3>
+<p>함수 <code>filter()</code>는 조건에 따라 행(row)을 추출합니다. 사용방법은 첫 번째 인수로 추출 대상이 되는 데이터 프레임을 지정하고, 두 번째 인수로 추출하고 싶은 행의 조건을 지정합니다. 이 서술방법은 dplyr 패키지의 다른 기본함수에도 똑같이 적용됩니다. AND 조건문 콤마(<code>,</code>)로 구별하거나 <code>&amp;</code> 연산자를 사용해도 되며 OR 조건문은 <code>|</code> 연산자를 이용합니다.</p>
+<pre class="r"><code>&gt; # 1월 1일 데이터 추출
+&gt; filter(hflights_df, Month == 1, DayofMonth == 1)</code></pre>
+<pre><code>#&gt; # A tibble: 552 x 21
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011     1     1     6  1400  1500 AA      428 N576…    60    40   -10
+#&gt;  2  2011     1     1     6   728   840 AA      460 N520…    72    41     5
+#&gt;  3  2011     1     1     6  1631  1736 AA     1121 N4WV…    65    37   - 9
+#&gt;  4  2011     1     1     6  1756  2112 AA     1294 N3DG…   136   113   - 3
+#&gt;  5  2011     1     1     6  1012  1347 AA     1700 N3DA…   155   117     7
+#&gt;  6  2011     1     1     6  1211  1325 AA     1820 N593…    74    39    15
+#&gt;  7  2011     1     1     6   557   906 AA     1994 N3BB…   129   113   - 9
+#&gt;  8  2011     1     1     6  1824  2106 AS      731 N614…   282   255   - 4
+#&gt;  9  2011     1     1     6   654  1124 B6      620 N324…   210   181     5
+#&gt; 10  2011     1     1     6  1639  2110 B6      622 N324…   211   188    61
+#&gt; # ... with 542 more rows, and 9 more variables: DepDelay &lt;int&gt;, Origin
+#&gt; #   &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+<pre class="r"><code>&gt; # 1월 혹은 2월 데이터 추출
+&gt; filter(hflights_df, Month == 1 | Month == 2)</code></pre>
+<pre><code>#&gt; # A tibble: 36,038 x 21
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011     1     1     6  1400  1500 AA      428 N576…    60    40   -10
+#&gt;  2  2011     1     2     7  1401  1501 AA      428 N557…    60    45   - 9
+#&gt;  3  2011     1     3     1  1352  1502 AA      428 N541…    70    48   - 8
+#&gt;  4  2011     1     4     2  1403  1513 AA      428 N403…    70    39     3
+#&gt;  5  2011     1     5     3  1405  1507 AA      428 N492…    62    44   - 3
+#&gt;  6  2011     1     6     4  1359  1503 AA      428 N262…    64    45   - 7
+#&gt;  7  2011     1     7     5  1359  1509 AA      428 N493…    70    43   - 1
+#&gt;  8  2011     1     8     6  1355  1454 AA      428 N477…    59    40   -16
+#&gt;  9  2011     1     9     7  1443  1554 AA      428 N476…    71    41    44
+#&gt; 10  2011     1    10     1  1443  1553 AA      428 N504…    70    45    43
+#&gt; # ... with 36,028 more rows, and 9 more variables: DepDelay &lt;int&gt;, Origin
+#&gt; #   &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+</div>
+<div id="-arrange--" class="section level3">
+<h3>함수 arrange()를 이용한 정렬</h3>
+<p>함수 <code>arrange()</code>는 지정한 열을 기준으로 작은 값으로부터 큰 값의 순으로 데이터를 정렬합니다. 역순으로 정렬할 때는 함수 desc()를 함께 사용합니다.</p>
+<pre class="r"><code>&gt; # 데이터를 ArrDelay, Month, Year 순으로 정렬
+&gt; arrange(hflights_df, ArrDelay, Month, Year)</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011     7     3     7  1914  2039 XE     2804 N121…    85    66   -70
+#&gt;  2  2011    12    25     7   741   926 OO     4591 N814…   165   147   -57
+#&gt;  3  2011     8    21     7   935  1039 OO     2001 N767…   184   171   -56
+#&gt;  4  2011     8    31     3   934  1039 OO     2040 N783…   185   172   -56
+#&gt;  5  2011     8    26     5  2107  2205 OO     2003 N713…   178   163   -55
+#&gt;  6  2011    12    24     6  2129  2337 CO     1552 N374…   248   234   -55
+#&gt;  7  2011     8    28     7  2059  2206 OO     2003 N783…   187   171   -54
+#&gt;  8  2011     8    29     1   935  1041 OO     2040 N767…   186   169   -54
+#&gt;  9  2011     8    18     4   939  1043 OO     2001 N783…   184   172   -52
+#&gt; 10  2011    12    24     6  2117  2258 CO     1712 N748…   221   200   -51
+#&gt; # ... with 227,486 more rows, and 9 more variables: DepDelay &lt;int&gt;, Origin
+#&gt; #   &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+<pre class="r"><code>&gt; # 데이터를 Month의 큰 값으로 부터 작은 값 순으로 정렬
+&gt; arrange(hflights_df, desc(Month))</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011    12    15     4  2113  2217 AA      426 N433…    64    44    47
+#&gt;  2  2011    12    16     5  2004  2128 AA      426 N588…    84    39   - 2
+#&gt;  3  2011    12    18     7  2007  2113 AA      426 N4XH…    66    46   -17
+#&gt;  4  2011    12    19     1  2108  2223 AA      426 N4YD…    75    54    53
+#&gt;  5  2011    12    20     2  2008  2107 AA      426 N434…    59    41   -23
+#&gt;  6  2011    12    21     3  2025  2124 AA      426 N589…    59    43   - 6
+#&gt;  7  2011    12    22     4  2021  2118 AA      426 N4YC…    57    39   -12
+#&gt;  8  2011    12    23     5  2015  2118 AA      426 N510…    63    36   -12
+#&gt;  9  2011    12    26     1  2013  2118 AA      426 N4YL…    65    43   -12
+#&gt; 10  2011    12    27     2  2007  2123 AA      426 N4YT…    76    53   - 7
+#&gt; # ... with 227,486 more rows, and 9 more variables: DepDelay &lt;int&gt;, Origin
+#&gt; #   &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+</div>
+<div id="-select-mutate---" class="section level3">
+<h3>함수 select(), mutate()를 이용한 열의 조작</h3>
+<p>함수 select()는 열(column)을 추출합니다. 복수의 열을 추출할 때에는 콤마(<code>,</code>)로 구분하며 인접한 열을 추출할 때에는 <code>:</code> 연산자를 이용할 수 있습니다.</p>
+<p>지정한 열 이외의 다른 열을 추출하고 싶을 때는 괄호 안에 제외하고 하고 싶은 열의 이름을 지정하고 괄호 앞에 <code>-</code> 부호를 붙여줍니다.</p>
+<pre class="r"><code>&gt; # Year, Month, DayOfWeek 열을 추출
+&gt; select(hflights_df, Year, Month, DayOfWeek)</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 3
+#&gt;     Year Month DayOfWeek
+#&gt;  * &lt;int&gt; &lt;int&gt;     &lt;int&gt;
+#&gt;  1  2011     1         6
+#&gt;  2  2011     1         7
+#&gt;  3  2011     1         1
+#&gt;  4  2011     1         2
+#&gt;  5  2011     1         3
+#&gt;  6  2011     1         4
+#&gt;  7  2011     1         5
+#&gt;  8  2011     1         6
+#&gt;  9  2011     1         7
+#&gt; 10  2011     1         1
+#&gt; # ... with 227,486 more rows</code></pre>
+<pre class="r"><code>&gt; # Year부터 DayOfWeek까지 추출(Year, Month, DayofMonth, DayofWeek)
+&gt; select(hflights_df, Year:DayOfWeek)</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 4
+#&gt;     Year Month DayofMonth DayOfWeek
+#&gt;  * &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;
+#&gt;  1  2011     1          1         6
+#&gt;  2  2011     1          2         7
+#&gt;  3  2011     1          3         1
+#&gt;  4  2011     1          4         2
+#&gt;  5  2011     1          5         3
+#&gt;  6  2011     1          6         4
+#&gt;  7  2011     1          7         5
+#&gt;  8  2011     1          8         6
+#&gt;  9  2011     1          9         7
+#&gt; 10  2011     1         10         1
+#&gt; # ... with 227,486 more rows</code></pre>
+<pre class="r"><code>&gt; # Year부터 DayOfWeek를 제외한 나머지 열을 추출
+&gt; select(hflights_df, -(Year:DayOfWeek))</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 17
+#&gt;    DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD… DepD… Orig… Dest  Dist…
+#&gt;  * &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+#&gt;  1  1400  1500 AA      428 N576…    60    40   -10     0 IAH   DFW     224
+#&gt;  2  1401  1501 AA      428 N557…    60    45   - 9     1 IAH   DFW     224
+#&gt;  3  1352  1502 AA      428 N541…    70    48   - 8   - 8 IAH   DFW     224
+#&gt;  4  1403  1513 AA      428 N403…    70    39     3     3 IAH   DFW     224
+#&gt;  5  1405  1507 AA      428 N492…    62    44   - 3     5 IAH   DFW     224
+#&gt;  6  1359  1503 AA      428 N262…    64    45   - 7   - 1 IAH   DFW     224
+#&gt;  7  1359  1509 AA      428 N493…    70    43   - 1   - 1 IAH   DFW     224
+#&gt;  8  1355  1454 AA      428 N477…    59    40   -16   - 5 IAH   DFW     224
+#&gt;  9  1443  1554 AA      428 N476…    71    41    44    43 IAH   DFW     224
+#&gt; 10  1443  1553 AA      428 N504…    70    45    43    43 IAH   DFW     224
+#&gt; # ... with 227,486 more rows, and 5 more variables: TaxiIn &lt;int&gt;, TaxiOut
+#&gt; #   &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
+<p>함수 mutate()는 열을 추가할 때 사용합니다.</p>
+<p>비슷한 기능을 하는 함수로 transform()이 있지만, 함수 mutate()는 함수에서 새로 만든 열을 같은 함수 안에서 바로 사용할 수 있는 장점이 있습니다. 글보다는 예제를 보는 것이 이해가 빠를 것 같습니다.</p>
+<pre class="r"><code>&gt; # 생성된 열 gain을 gain_per_hour의 계산에 사용할 수 있음
+&gt; mutate(hflights_df, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60))</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 23
+#&gt;     Year Month Dayo… DayO… DepT… ArrT… Uniq… Flig… Tail… Actu… AirT… ArrD…
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+#&gt;  1  2011     1     1     6  1400  1500 AA      428 N576…    60    40   -10
+#&gt;  2  2011     1     2     7  1401  1501 AA      428 N557…    60    45   - 9
+#&gt;  3  2011     1     3     1  1352  1502 AA      428 N541…    70    48   - 8
+#&gt;  4  2011     1     4     2  1403  1513 AA      428 N403…    70    39     3
+#&gt;  5  2011     1     5     3  1405  1507 AA      428 N492…    62    44   - 3
+#&gt;  6  2011     1     6     4  1359  1503 AA      428 N262…    64    45   - 7
+#&gt;  7  2011     1     7     5  1359  1509 AA      428 N493…    70    43   - 1
+#&gt;  8  2011     1     8     6  1355  1454 AA      428 N477…    59    40   -16
+#&gt;  9  2011     1     9     7  1443  1554 AA      428 N476…    71    41    44
+#&gt; 10  2011     1    10     1  1443  1553 AA      428 N504…    70    45    43
+#&gt; # ... with 227,486 more rows, and 11 more variables: DepDelay &lt;int&gt;,
+#&gt; #   Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;,
+#&gt; #   Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;, gain &lt;int&gt;,
+#&gt; #   gain_per_hour &lt;dbl&gt;</code></pre>
+<pre class="r"><code>&gt; # 생성된 열 gain을 gain_per_hour의 계산에 사용할 수 없음
+&gt; transform(hflights, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60))</code></pre>
+<pre><code>#&gt; Error in eval(substitute(list(...)), `_data`, parent.frame()): object &#39;gain&#39; not found</code></pre>
+</div>
+<div id="-summarise--" class="section level3">
+<h3>함수 summarise()를 이용한 집계</h3>
+<p>함수 summarise()는 mean(), sd(), var(), median() 등의 함수를 지정하여 기초 통계량을 구할 수 있습니다. 결과값이 데이터 프레임 형식으로 돌아오는 것에 주의하세요.</p>
+<pre class="r"><code>&gt; # 평균 출발지연시간 계산
+&gt; summarise(hflights_df, delay = mean(DepDelay, na.rm = TRUE))</code></pre>
+<pre><code>#&gt; # A tibble: 1 x 1
+#&gt;   delay
+#&gt;   &lt;dbl&gt;
+#&gt; 1  9.44</code></pre>
+</div>
+<div id="-group_by--" class="section level3">
+<h3>함수 group_by()를 이용한 그룹화</h3>
+<p>함수 group_by()에서 지정한 열의 수준(level)별로 그룹화된 결과를 얻을 수 있습니다.<br />
+예를 들어 비행편수 20편 이상, 평균 비행 거리 2,000마일 이상인 항공사별 평균 연착시간을 계산하여 그림으로 표현하는 코드는 다음과 같습니다.</p>
+<pre class="r"><code>&gt; planes &lt;- group_by(hflights_df, TailNum)
+&gt; delay &lt;- summarise(planes, count = n(), 
++                    dist = mean(Distance, na.rm = TRUE), 
++                    delay = mean(ArrDelay, na.rm = TRUE))
+&gt; delay &lt;- filter(delay, count &gt; 20, dist &lt; 2000)
+&gt; 
+&gt; library(ggplot2)
+&gt; ggplot(delay, aes(dist, delay)) + 
++   geom_point(aes(size = count), alpha = 1/2) + 
++   geom_smooth() + 
++   scale_size_area()</code></pre>
+<pre><code>#&gt; `geom_smooth()` using method = &#39;gam&#39;</code></pre>
+<p><img src="/post/2014-02-25-introduction-to-dplyr_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>함수 group_by()의 더 많은 예제는 이 글의 참고에서 언급한 패키지 안에 포함된 소개문서를 참고하세요.</p>
+</div>
+<div id="dplyr---chain-" class="section level3">
+<h3>dplyr 패키지의 백미, chain() 함수</h3>
+<p>함수 chain() 혹은 간단히 <code>%&gt;%</code>를 이용함으로써 각 조작을 연결해서 한 번에 수행할 수 있습니다. 즉, 최종 결과를 얻기 위해 임시로 데이터 프레임을 만들지 않아도 되는 편리한 기능입니다. 개인적으로는 dplyr 패키지의 백미라고 생각합니다.</p>
+<p>지금까지 일관되게 첫 번째 인수에 데이터 프레임을 지정했습니다. 그러나 <code>%&gt;%</code>로 연결하면 가장 먼저 데이터 프레임을 지정하면 그다음부터는 인수를 생략할 수 있을 뿐 아니라 앞선 함수의 결과(데이터 프레임)를 뒤에 오는 함수의 입력값으로 사용하게 됩니다. 역시 예제를 실행해 확인해 보는 것이 좋겠죠.</p>
+<pre class="r"><code>&gt; a1 &lt;- group_by(hflights, Year, Month, DayofMonth)
+&gt; a2 &lt;- select(a1, Year:DayofMonth, ArrDelay, DepDelay)
+&gt; a3 &lt;- summarise(a2, arr = mean(ArrDelay, na.rm = TRUE), 
++                 dep = mean(DepDelay, na.rm = TRUE))
+&gt; a4 &lt;- filter(a3, arr &gt; 30 | dep &gt; 30)</code></pre>
+<p>위 예제는 hflights 데이터를 a1) Year, Month, DayofMonth의 수준별로 그룹화, a2) Year부터 DayofMonth, ArrDelay, DepDealy 열을 선택, a3) 평균 연착시간과 평균 출발 지연시간을 구하고, a4) 평균 연착시간과 평균 출발지연시간이 30분 이상인 데이터를 추출한 결과입니다. 위 예제를 <code>%&gt;%</code> 함수를 이용하면 다음과 같습니다.</p>
+<pre class="r"><code>&gt; hflights_df %&gt;% 
++   group_by(Year, Month, DayofMonth) %&gt;% 
++   summarise(arr = mean(ArrDelay, na.rm = TRUE), 
++             dep = mean(DepDelay, na.rm = TRUE)) %&gt;% 
++   filter(arr &gt; 30 |  dep &gt; 30)</code></pre>
+<pre><code>#&gt; # A tibble: 14 x 5
+#&gt; # Groups: Year, Month [10]
+#&gt;     Year Month DayofMonth   arr   dep
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt;  1  2011     2          4  44.1  47.2
+#&gt;  2  2011     3          3  35.1  38.2
+#&gt;  3  2011     3         14  46.6  36.1
+#&gt;  4  2011     4          4  38.7  27.9
+#&gt;  5  2011     4         25  37.8  22.3
+#&gt;  6  2011     5         12  69.5  64.5
+#&gt;  7  2011     5         20  37.0  26.6
+#&gt;  8  2011     6         22  65.5  62.3
+#&gt;  9  2011     7         29  29.6  31.9
+#&gt; 10  2011     9         29  39.2  32.5
+#&gt; 11  2011    10          9  61.9  59.5
+#&gt; 12  2011    11         15  43.7  39.2
+#&gt; 13  2011    12         29  26.3  30.8
+#&gt; 14  2011    12         31  46.5  54.2</code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>맺음말</h2>
+<p>Hadley Wickham가 작성한 여러 패키지를 쓰다 보면 R이라는 통계분석에 특화된 언어(DSL; Domain specific language)의 영역에서 자신의 가치관을 반영한 패키지를 연달아서 내놓는 열정에 감탄하게 됩니다. 사용자 입장에서야 편리하고 빠른 패키지를 만들어 주어서 고마울 뿐이죠.</p>
+<p>패키지 안에 포함된 소개문서는 패키지 인스톨 후,</p>
+<pre class="r"><code>&gt; vignette(&quot;introduction&quot;, package = &quot;dplyr&quot;)</code></pre>
+<p>을 실행하거나 R project 사이트의 <a href="http://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html">Introduction to dplyr</a>에서 확인할 수 있습니다.</p>
+</div>

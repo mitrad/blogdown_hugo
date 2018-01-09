@@ -1,0 +1,30 @@
+---
+title: '[R] 하나의 윈도에 2개의 그래프를 그리는 방법'
+date: 2008-07-29
+slug: two-plot-in-the-single-window
+categories:
+  - R
+tags:
+  - graph
+  - R-Tips
+---
+
+
+
+<p>R에서 하나의 윈도에 2개 이상의 그래프를 겹쳐 그리려면 일반적으로 함수 <code>curve()</code>나 <code>points()</code>를 이용한다. 하지만, 패키지에 따라서는 이 함수들을 제대로 사용할 수 없는 경우가 있다. 경험한 바로는 <a href="http://en.wikipedia.org/wiki/Receiver_operating_characteristic">ROC (receive operating characteristic)</a> curve를 간단하게 그릴 수 있게 해주는 <a href="http://cran.r-project.org/web/packages/ROCR/index.html">ROCR package</a>에서는 <code>points()</code> 함수를 쓸 수가 없었다. 이 같은 경우 2개의 그래프를 겹쳐 그릴 수 있게 하기 위해서는 함수 <code>par(new=TRUE)</code>를 이용한다.</p>
+<pre class="r"><code>&gt; x1 &lt;- rnorm(25, mean=, sd=1)
+&gt; y1 &lt;- dnorm(x1, mean=, sd=1)
+&gt;  
+&gt; x2 &lt;- rnorm(25, mean=, sd=1)
+&gt; y2 &lt;- dnorm(x2, mean=, sd=1)
+&gt;  
+&gt; # points() 함수를 이용한 경우
+&gt; plot(x1, y1, type=&#39;p&#39;, xlim=range(x1,x2), ylim=range(y1,y2))
+&gt; points(x2, y2, type=&#39;p&#39;, col=&quot;red&quot;,xlim=range(x1,x2), ylim=range(y1,y2))</code></pre>
+<p><img src="/post/2008-07-29-two-plot-in-the-single-window_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>&gt; # par(new=TRUE)를 이용한 경우
+&gt; plot(x1, y1, type=&#39;p&#39;, xlim=range(x1,x2), ylim=range(y1,y2))
+&gt; par(new=TRUE)
+&gt; plot(x2, y2, type=&#39;p&#39;, col=&quot;red&quot;, axes=F, xlim=range(x1,x2), ylim=range(y1,y2))</code></pre>
+<p><img src="/post/2008-07-29-two-plot-in-the-single-window_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p>2개 이상의 그래프를 겹쳐 그릴 때는 항상 x, y축의 범위에 주의해야 한다.</p>

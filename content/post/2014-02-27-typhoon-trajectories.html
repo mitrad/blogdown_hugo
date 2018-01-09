@@ -1,0 +1,113 @@
+---
+title: "태풍이동경로의 시각화"
+date: 2014-02-28
+categories: 
+    - R
+tags: [R, dplyr package]
+slug: typhoon-trajectories
+---
+
+
+
+<p>Gaston Sanchez씨의 <a href="http://rpubs.com/gaston/hurricanes">Visualizing Hurricane Trajectories</a>를 읽고 <strong>dplyr</strong> 패키지 연습도 겸해서 따라 해보기.</p>
+<div class="section level3">
+<h3>데이터</h3>
+<p>National Climatic Data Center에서 제공하는 <a href="https://data.nodc.noaa.gov/cgi-bin/iso?id=gov.noaa.ncdc:C00834">NCDC International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 3</a>을 이용했다. 다양한 포맷의 데이터를 제공하는데 여기서는 csv 파일을 이용.</p>
+<p>우리나라 및 일본의 최근 데이터를 찾아보았지만, 일본 기상청은 개별 태풍에 대해 <a href="http://www.data.jma.go.jp/fcd/yoho/typhoon/position_table/index.html">pdf 파일</a>만 제공하고 있고 우리나라도 <a href="http://typ.kma.go.kr/TYPHOON/statistics/statistics_02_4.jsp">국가 태풍센터</a>에서 진로정보를 공개하고 있지만, 파일이 아닌 웹사이트의 정보를 크롤링해야 하는 삽질이 필요해서 포기.</p>
+</div>
+<div id="r--" class="section level3">
+<h3>R을 이용한 시각화</h3>
+<pre class="r"><code>&gt; # 패키지 불러오기
+&gt; library(ggmap)
+&gt; library(ggplot2)
+&gt; library(dplyr)</code></pre>
+<p>우리나라에 영향을 미치는 태풍의 경로를 알아보기 위해 IBTrACS에서 Western North Pacific(WP) 지역 데이터 불러온다. 불러온 데이터의 형식이 모두 문자형이기 때문에 연도, 위도, 경도를 숫자형으로 변환. 풍속단위를 노트(knot)에서 초속(m/s)으로 변환.</p>
+<pre class="r"><code>&gt; # IBTrACS에서 Western North Pacfic(WP) 지역 데이터 불러오기 
+&gt; noaa &lt;- &quot;ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v03r05/wmo/csv/basin/&quot;
+&gt; WP.basin = read.csv(paste(noaa, &quot;Basin.WP.ibtracs_wmo.v03r05.csv&quot;, sep =&quot;&quot;), 
++                      skip = 1, stringsAsFactors = FALSE)
+&gt; # 변수 정보 제거
+&gt; WP.basin &lt;- WP.basin[-1,]
+&gt; 
+&gt; # dplyr 패키지를 이용하기 위해 tbl_df로 변환
+&gt; WP.basin.df &lt;- tbl_df(WP.basin)
+&gt; 
+&gt; # Season, Latitude, Logitude : 문자 -&gt; 숫자
+&gt; # Wind.WMO. : 문자 -&gt; 숫자 &amp; 노트 -&gt; 초속(m/s)
+&gt; # ISO_time에서 월 정보 추출
+&gt; WP.df &lt;- mutate(WP.basin.df, 
++                 Season = as.numeric(Season),
++                 Latitude = as.numeric(gsub(&quot;^ &quot;, &quot;&quot;, Latitude)),
++                 Longitude = as.numeric(gsub(&quot;^ &quot;, &quot;&quot;, Longitude)),
++                 Wind.WMO. = as.numeric(gsub(&quot;^ &quot;, &quot;&quot;, Wind.WMO.)) * 0.5144,
++                 ISO_time = as.POSIXct(ISO_time),
++                 Month = factor(substr(ISO_time, 6,7), labels = c(month.name))
++ )</code></pre>
+<p>데이터에 수록된 가장 최근 기록이 2010년이기 때문에, 1999~2010년 태풍 정보만 추출하고 이름이 없는 태풍도 삭제.</p>
+<p>지도에 각 태풍의 경로를 그리기 위해 태풍 ID 생성.</p>
+<pre class="r"><code>&gt; substorms &lt;- WP.df %&gt;% 
++   filter(Season %in% 1999:2010 &amp; !(Name == &quot;NOT NAMED&quot;)) %&gt;%
++   mutate(ID = as.factor(paste(Name, Season, sep = &quot;.&quot;)))</code></pre>
+<p><strong>maps</strong> 패키지를 이용하면 참고했던 사이트의 그림과 비슷한 그림을 그릴 수 있겠지만, 지도의 윗부분이 이상하게 나와서 <strong>ggmap</strong> 패키지를 이용하기로 했다. 구글맵에서 위도 40도, 경도 145도를 중심으로 한 지도를 가져온 후, 그 위에 각 태풍의 경로를 시각화.</p>
+<pre class="r"><code>&gt; map &lt;- ggmap(get_googlemap(center = c(lon=145, lat=40), 
++                            zoom=3, maptype=&quot;terrain&quot;,
++                            color=&quot;bw&quot;, scale=2), extent=&quot;device&quot;)
+&gt; 
+&gt; # 태풍이동경로 1999 - 2010
+&gt; map + geom_path(data = substorms, 
++                 aes(x = Longitude, y = Latitude,group = ID, colour = Wind.WMO.), 
++                 alpha = 0.5, size = 0.8) + 
++   labs(x = &quot;&quot;, y = &quot;&quot;, colour = &quot;Wind \n(m/sec)&quot;,
++        title = &quot;Typhoon Trajectories 1999 - 2010&quot;) +
++   theme(panel.background = element_rect(fill = &quot;gray10&quot;, colour = &quot;gray30&quot;), 
++         axis.text.x = element_blank(), 
++         axis.text.y = element_blank(), axis.ticks = element_blank(), 
++         panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
+<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>함수 <code>ggplot2::facet_warp</code>를 사용하여 연도별, 월별 태풍 이동 경로를 시각화</p>
+<pre class="r"><code>&gt; map + 
++   geom_path(
++     data = substorms, 
++     aes(x = Longitude, y = Latitude,group = ID, colour = Wind.WMO.), 
++     alpha = 0.5, size = 0.8
++   ) + 
++   labs(
++     x = &quot;&quot;, y = &quot;&quot;, colour = &quot;Wind \n(m/sec)&quot;,
++     title = &quot;Typoon Trajectories by Year (1999 - 2010)&quot;
++   ) + 
++   facet_wrap(~Season) +  
++   # facet_grid(~Month) + 
++   theme(
++     panel.background = element_rect(fill = &quot;gray10&quot;, colour = &quot;gray30&quot;), 
++     axis.text.x = element_blank(), 
++     axis.text.y = element_blank(), 
++     axis.ticks = element_blank(), 
++     panel.grid.major = element_blank(), 
++     panel.grid.minor = element_blank()
++   ) </code></pre>
+<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>&gt; map + 
++   geom_path(
++     data = substorms, 
++     aes(x = Longitude, y = Latitude,group = ID, colour = Wind.WMO.), 
++     alpha = 0.5, size = 0.8
++   ) + 
++   labs(
++     x = &quot;&quot;, y = &quot;&quot;, colour = &quot;Wind \n(m/sec)&quot;,
++     title = &quot;Typoon Trajectories by Year (1999 - 2010)&quot;
++   ) + 
++   facet_wrap(~ Month, ncol = 4) + 
++   theme(
++     panel.background = element_rect(fill = &quot;gray10&quot;, colour = &quot;gray30&quot;), 
++     axis.text.x = element_blank(), 
++     axis.text.y = element_blank(), 
++     axis.ticks = element_blank(), 
++     panel.grid.major = element_blank(), 
++     panel.grid.minor = element_blank()
++   ) </code></pre>
+<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>그나저나 구글맵 쓸때마다 저 Sea of Japan이 참 거슬리네…</p>
+<blockquote>
+<p>구글아 구글아 동해를 내놓아라 내어놓지 않으면 구워서 먹으리.</p>
+</blockquote>
+</div>

@@ -1,0 +1,71 @@
+# Site settings
+baseurl = "https://woosung.netlify.com"
+#themesDir = "../.."
+title = "memoRandum for data analytics"
+theme = "hugo-cactus-theme"
+# Enter your tracking code to enable Google Analytics
+googleAnalytics = "UA-112164265-1"
+# Disable comments by leaving disqusShortname empty
+disqusShortname = "woosung-netlify-com"
+
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+languageCode = "en-us"
+paginate = 10
+footnotereturnlinkcontents = "↩"
+
+
+[permalinks]
+    post = "/:year/:month/:slug/"
+    
+[params]
+	name = "Woosung Yang"
+	description = "memoRandum for data analytics"
+	bio = "Blogger & Data Analyst"
+	# Enter optionally your twitter account
+	twitter = "wyang72"
+	enableRSS = true
+
+	# Integrate Javascript files or stylesheets by adding the url to the external assets or by
+	# linking local files with their path relative to the static folder, e.g. "css/styles.css"
+	customCSS = []
+	customJS  = ["js/center-img.js"]
+
+	# The variables below are optionally too and can be used to
+	# translate or customize each string of the theme.
+
+	# Navigation links
+	home = ""
+	subscribe = "RSS"
+	# Pagination links
+	olderPosts = ""
+	newerPosts = ""
+	readMore = ""
+	copyright = ""
+	# Sharing options and author information in posts
+	aboutAuthor = "Data Analyst"
+	tweet = ""
+	share = "facebook"
+	# 404 page
+	title404 = ""
+	subtitle404 = ""
+	# Choose a font for the social icons in the footer. Either "mono-social" or "font-awesome"
+	iconFont = "mono-social"
+  # The social icons can be styled differently if you use mono as font - circle, rounded, or empty
+  socialIconStyle = "rounded"
+
+ # options for highlight.js (version, additional languages, and theme)
+  highlightjsVersion = "9.11.0"
+  highlightjsCDN = "//cdn.bootcss.com"
+  highlightjsLang = ["r", "yaml", "tex"]
+  highlightjsTheme = "github"
+  
+  MathJaxCDN = "//cdn.bootcss.com"
+  MathJaxVersion = "2.7.1"
+
+
+# Add additional social link entries underneath
+[social]
+    twitter  = "https://www.twitter.com/wyang72"
+    facebook = "https://www.facebook.com/wyang72"
+    github   = "https://www.github.com/mitrad"

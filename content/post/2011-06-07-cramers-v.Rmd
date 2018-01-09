@@ -1,0 +1,52 @@
+---
+title: "두 이산형 변수의 연관성 척도 Cramér's V"
+categories:
+  - R-Tips
+  - 통계 이야기
+tags:
+  - association
+  - "Cramer's V"
+  - R-Tips
+  - 연관성의 척도
+date: 2011-03-04
+slug: cramers-v
+---
+```{r eval=TRUE, echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = TRUE,
+  tidy = FALSE,
+  width = 60
+)
+
+options(digits = 3)
+```
+
+두 이산형 변수의 연관성(association)에 대해 알아볼 때 흔히 카이제곱 검정을 이용합니다. 하지만, 엄밀히 말하면 카이제곱 검정은 연관성의 유의한 정도(test for the significance)의 결과일 뿐, 연관성 크기를 나타내는 척도는 아닙니다. 즉, 두 개의 데이터 셋에 대해 각각 연관성 검정을 했을 때 검정결과인 유의확률을 가지고 어느 쪽이 연관성이 크다고는 말할 수 없다는 것이죠.
+
+두 이산형 변수의 연관성의 크기를 나타내는 척도 중 하나가 Cramér&#8217;s V라는 것이 있습니다.  
+
+  
+Cramér&#8217;s V의 계산 식은  
+
+$$  
+\phi_c = \sqrt{\frac{\chi^2}{N(k-1)}}  
+$$  
+
+이며, 0에서 1 사이의 값을 가집니다. 단, 위 식에서 $$ \chi^2 $$ 는 카이제곱 검정의 검정 통계량, N은 관측값의 수, k는 두 이산형 변수의 수준(level) 중 작은 값을 의미합니다.
+
+R을 이용해 Cramér&#8217;s V를 구하는 함수를 만들어 보면
+
+
+```{r prompt=TRUE, warning=FALSE}
+cramer.v <- function(x, y) {
+  CV <- sqrt(chisq.test(x, y, correct = FALSE)$statistic /
+    (length(x) * (min(length(unique(x)), length(unique(y))) - 1)))
+  cat("Cramér V =" , CV, "\n")
+}
+```
+```{r prompt=TRUE, warning=FALSE}
+class <- rep(c("case", "ctl"),each = 100)
+genotype <- c(rep(c("AA+AT", "TT"), c(70, 30)), rep(c("AA+AT", "TT"), c(38, 62)))
+cramer.v(class, genotype)
+``` 

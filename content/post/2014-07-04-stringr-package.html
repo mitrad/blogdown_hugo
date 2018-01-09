@@ -1,0 +1,243 @@
+---
+title: stringr package를 이용한 문자열 조작
+date: '2014-07-04'
+categories: R
+tags:
+  - R
+  - stringr package
+slug: stringr-package
+---
+
+
+
+<p>최근 R for everyone이라는 책을 읽었다. 그 중 <strong>stringr</strong> 이라는 패키지를 이용한 문자열 처리 방법이 나와 있어 이번 기회에 정리해 보려 한다.</p>
+<p>R 표준 <strong>base</strong> 패키지에 포함된 함수군와 비슷한 기능을 하는 것으로 보이지만 더 합리적인 출력형식을 가지므로 사용하기 편리하다.</p>
+<p>이 패키지의 몇몇 특징을 살펴보면</p>
+<ul>
+<li><p>factor와 character를 같은 방식으로 처리</p></li>
+<li><p>일관성 있는 함수 이름과 인수</p></li>
+<li>다른 함수의 입력값으로 사용하기 편리한 출력값.
+<ul>
+<li>길이 0인 입력값에 대해 길이 0인 결과를 돌려줌</li>
+<li>입력값 <code>NA</code>가 포함되어 있을 때는 그 부분의 결과를 <code>NA</code>로 돌려줌</li>
+</ul></li>
+<li><p>사용빈도가 떨어지는 문자열 조작 처리를 과감하게 제거하여 간략화시킴</p></li>
+</ul>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p><strong>ggplot2</strong>를 설치하면 자동으로 설치된다. 혹은</p>
+<pre class="r"><code>&gt; install.packages(&quot;stringr&quot;)</code></pre>
+</div>
+<div class="section level2">
+<h2>함수</h2>
+<div id="basic-string-operation" class="section level3">
+<h3>Basic string operation</h3>
+<ul>
+<li><code>str_length(string)</code>
+<ul>
+<li>문자열의 길이를 계산. <code>base::nchar(x)</code>와 같은 기능을 하는 함수. 단, <code>NA</code> 에 대해서는 2가 아닌 <code>NA</code>를 돌려준다.</li>
+</ul>
+<pre class="r"><code>&gt; library(stringr)
+&gt; str_length(c(&quot;i&quot;, &quot;like&quot;, &quot;programming&quot;, NA))</code></pre>
+<pre><code>#&gt; [1]  1  4 11 NA</code></pre>
+<pre class="r"><code>&gt; nchar(c(&quot;i&quot;, &quot;like&quot;, &quot;programming&quot;, NA))</code></pre>
+<pre><code>#&gt; [1]  1  4 11 NA</code></pre></li>
+<li><code>str_sub(string, start=1, end=-1)</code>
+<ul>
+<li>문자열을 부분적으로 참조, 변경. <code>base::substr()</code>와 같은 기능을 하는 함수. 음수를 사용하여 문자열의 끝으로 부터의 위치를 지정할 수 있다.</li>
+</ul>
+<pre class="r"><code>&gt; hw &lt;- &quot;Hadley Wickham&quot;
+&gt; str_sub(hw, 1, 6)</code></pre>
+<pre><code>#&gt; [1] &quot;Hadley&quot;</code></pre>
+<pre class="r"><code>&gt; substr(hw, 1, 6)</code></pre>
+<pre><code>#&gt; [1] &quot;Hadley&quot;</code></pre>
+<pre class="r"><code>&gt; str_sub(hw, end = 6)</code></pre>
+<pre><code>#&gt; [1] &quot;Hadley&quot;</code></pre>
+<pre class="r"><code>&gt; str_sub(hw, -7)</code></pre>
+<pre><code>#&gt; [1] &quot;Wickham&quot;</code></pre></li>
+<li><code>str_c(..., sep='', collapse=NULL)</code>, <code>str_join(..., sep='', collapse=NULL)</code>
+<ul>
+<li>문자열을 통합. 디폴트의 <code>sep</code>가 스페이스 공백이 아니므로 <code>base::paste0()</code>와 비슷하다.</li>
+</ul>
+<pre class="r"><code>&gt; str_c(letters[-26], &quot; comes before &quot;, letters[-1])</code></pre>
+<pre><code>#&gt;  [1] &quot;a comes before b&quot; &quot;b comes before c&quot; &quot;c comes before d&quot;
+#&gt;  [4] &quot;d comes before e&quot; &quot;e comes before f&quot; &quot;f comes before g&quot;
+#&gt;  [7] &quot;g comes before h&quot; &quot;h comes before i&quot; &quot;i comes before j&quot;
+#&gt; [10] &quot;j comes before k&quot; &quot;k comes before l&quot; &quot;l comes before m&quot;
+#&gt; [13] &quot;m comes before n&quot; &quot;n comes before o&quot; &quot;o comes before p&quot;
+#&gt; [16] &quot;p comes before q&quot; &quot;q comes before r&quot; &quot;r comes before s&quot;
+#&gt; [19] &quot;s comes before t&quot; &quot;t comes before u&quot; &quot;u comes before v&quot;
+#&gt; [22] &quot;v comes before w&quot; &quot;w comes before x&quot; &quot;x comes before y&quot;
+#&gt; [25] &quot;y comes before z&quot;</code></pre>
+<pre class="r"><code>&gt; paste0(letters[-26], &quot; comes before &quot;, letters[-1])</code></pre>
+<pre><code>#&gt;  [1] &quot;a comes before b&quot; &quot;b comes before c&quot; &quot;c comes before d&quot;
+#&gt;  [4] &quot;d comes before e&quot; &quot;e comes before f&quot; &quot;f comes before g&quot;
+#&gt;  [7] &quot;g comes before h&quot; &quot;h comes before i&quot; &quot;i comes before j&quot;
+#&gt; [10] &quot;j comes before k&quot; &quot;k comes before l&quot; &quot;l comes before m&quot;
+#&gt; [13] &quot;m comes before n&quot; &quot;n comes before o&quot; &quot;o comes before p&quot;
+#&gt; [16] &quot;p comes before q&quot; &quot;q comes before r&quot; &quot;r comes before s&quot;
+#&gt; [19] &quot;s comes before t&quot; &quot;t comes before u&quot; &quot;u comes before v&quot;
+#&gt; [22] &quot;v comes before w&quot; &quot;w comes before x&quot; &quot;x comes before y&quot;
+#&gt; [25] &quot;y comes before z&quot;</code></pre>
+<pre class="r"><code>&gt; str_c(letters, collapse = &quot;, &quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z&quot;</code></pre></li>
+<li><code>str_split(string, pattern, n=Inf)</code>
+<ul>
+<li>문자열을 분리. <code>base::strsplit(x, split)</code> 와 대응하는 함수. 최대 n 개의 분할을 지정할 수 있다. 결과값은 list. 문자열을 정해진 n 개로 나누는 <code>str_split_fixed()</code> 도 있다. 결과값은 matrix.</li>
+</ul>
+<pre class="r"><code>&gt; fruits &lt;- c(
++   &quot;apples and oranges and pears and bananas&quot;,
++   &quot;pineapples and mangos and guavas&quot;
++ )
+&gt; str_split(fruits, &quot; and &quot;)</code></pre>
+<pre><code>#&gt; [[1]]
+#&gt; [1] &quot;apples&quot;  &quot;oranges&quot; &quot;pears&quot;   &quot;bananas&quot;
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] &quot;pineapples&quot; &quot;mangos&quot;     &quot;guavas&quot;</code></pre>
+<pre class="r"><code>&gt; strsplit(fruits, &quot;and&quot;)</code></pre>
+<pre><code>#&gt; [[1]]
+#&gt; [1] &quot;apples &quot;   &quot; oranges &quot; &quot; pears &quot;   &quot; bananas&quot; 
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] &quot;pineapples &quot; &quot; mangos &quot;    &quot; guavas&quot;</code></pre>
+<pre class="r"><code>&gt; str_split(fruits, &quot; and &quot;, n = 3)</code></pre>
+<pre><code>#&gt; [[1]]
+#&gt; [1] &quot;apples&quot;            &quot;oranges&quot;           &quot;pears and bananas&quot;
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] &quot;pineapples&quot; &quot;mangos&quot;     &quot;guavas&quot;</code></pre>
+<pre class="r"><code>&gt; str_split(fruits, &quot; and &quot;, n = 2)</code></pre>
+<pre><code>#&gt; [[1]]
+#&gt; [1] &quot;apples&quot;                        &quot;oranges and pears and bananas&quot;
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] &quot;pineapples&quot;        &quot;mangos and guavas&quot;</code></pre>
+<pre class="r"><code>&gt; str_split_fixed(fruits, &quot; and &quot;, 4)</code></pre>
+<pre><code>#&gt;      [,1]         [,2]      [,3]     [,4]     
+#&gt; [1,] &quot;apples&quot;     &quot;oranges&quot; &quot;pears&quot;  &quot;bananas&quot;
+#&gt; [2,] &quot;pineapples&quot; &quot;mangos&quot;  &quot;guavas&quot; &quot;&quot;</code></pre></li>
+</ul>
+</div>
+<div id="pattern-matching" class="section level3">
+<h3>Pattern Matching</h3>
+<ul>
+<li><code>str_detect(string, pattern)</code>
+<ul>
+<li>매치하는 곳이 있는지 없는지를 logical 값으로 돌려준다. <code>base::grepl(pattern, x)</code>과 대응.</li>
+</ul>
+<pre class="r"><code>&gt; fruit &lt;- c(&quot;apple&quot;, &quot;banana&quot;, &quot;pear&quot;, &quot;pinapple&quot;)
+&gt; str_detect(fruit, &quot;a&quot;)</code></pre>
+<pre><code>#&gt; [1] TRUE TRUE TRUE TRUE</code></pre>
+<pre class="r"><code>&gt; str_detect(fruit, &quot;^a&quot;)</code></pre>
+<pre><code>#&gt; [1]  TRUE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code>&gt; str_detect(fruit, &quot;a$&quot;)</code></pre>
+<pre><code>#&gt; [1] FALSE  TRUE FALSE FALSE</code></pre>
+<pre class="r"><code>&gt; str_detect(fruit, &quot;b&quot;)</code></pre>
+<pre><code>#&gt; [1] FALSE  TRUE FALSE FALSE</code></pre>
+<pre class="r"><code>&gt; str_detect(fruit, &quot;[aeiou]&quot;)</code></pre>
+<pre><code>#&gt; [1] TRUE TRUE TRUE TRUE</code></pre></li>
+<li><code>str_count(string, pattern)</code>
+<ul>
+<li>매치하는 곳의 수를 돌려준다.</li>
+</ul>
+<pre class="r"><code>&gt; str_count(fruit, c(&quot;a&quot;, &quot;b&quot;, &quot;p&quot;, &quot;p&quot;))</code></pre>
+<pre><code>#&gt; [1] 1 1 1 3</code></pre></li>
+<li><code>str_locate(string, pattern)</code>
+<ul>
+<li>처음으로 매치되는 곳의 start, end 위치를 행렬로 돌려준다.</li>
+</ul>
+<pre class="r"><code>&gt; str_locate(fruit, &quot;e&quot;)</code></pre>
+<pre><code>#&gt;      start end
+#&gt; [1,]     5   5
+#&gt; [2,]    NA  NA
+#&gt; [3,]     2   2
+#&gt; [4,]     8   8</code></pre></li>
+<li><code>str_extract(string, pattern)</code>, <code>str_extract_all(string, pattern)</code>
+<ul>
+<li>매치된 부분 문자열을 추출. 매치되지 않은 요소는 <code>NA</code>. <code>base::grep(pattern, x, value=TRUE)</code>는 매치된 요소만 원래의 형태로 돌려준다.</li>
+</ul>
+<pre class="r"><code>&gt; shopping_list &lt;- c(&quot;apples x4&quot;, &quot;flour&quot;, &quot;sugar&quot;, &quot;milk x2&quot;)
+&gt; str_extract(shopping_list, &quot;\\d&quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;4&quot; NA  NA  &quot;2&quot;</code></pre>
+<pre class="r"><code>&gt; grep(&quot;\\d&quot;, shopping_list, value = TRUE)</code></pre>
+<pre><code>#&gt; [1] &quot;apples x4&quot; &quot;milk x2&quot;</code></pre>
+<pre class="r"><code>&gt; str_extract(shopping_list, &quot;[a-z]+&quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;apples&quot; &quot;flour&quot;  &quot;sugar&quot;  &quot;milk&quot;</code></pre>
+<pre class="r"><code>&gt; grep(&quot;[a-z]+&quot;, shopping_list, value = TRUE)</code></pre>
+<pre><code>#&gt; [1] &quot;apples x4&quot; &quot;flour&quot;     &quot;sugar&quot;     &quot;milk x2&quot;</code></pre></li>
+<li><code>str_match(string, pattern)</code>, <code>str_match_all(string, pattern)</code>
+<ul>
+<li>매치된 부분 문자열을 추출하고 참조를 행렬로 돌려준다。 <code>str_extract(string, pattern)</code>의 결과를 1열에 각 괄호에 매치된 이후의 결과가 2열 이후에 들어간다. 예제를 보는 것이 이해에 도움이 됨.</li>
+</ul>
+<pre class="r"><code>&gt; strings &lt;- c(&quot; 219 733 8965&quot;, &quot;329-293-8753 &quot;, &quot;banana&quot;, &quot;595 794 7569&quot;,
++   &quot;387 287 6718&quot;, &quot;apple&quot;, &quot;233.398.9187  &quot;, &quot;482 952 3315&quot;,
++   &quot;239 923 8115&quot;, &quot;842 566 4692&quot;, &quot;Work: 579-499-7527&quot;, &quot;$1000&quot;,
++   &quot;Home: 543.355.3679&quot;)
+&gt; phone &lt;- &quot;([2-9][0-9]{2})[- .]([0-9]{3})[- .]([0-9]{4})&quot;
+&gt; 
+&gt; str_extract(strings, phone)</code></pre>
+<pre><code>#&gt;  [1] &quot;219 733 8965&quot; &quot;329-293-8753&quot; NA             &quot;595 794 7569&quot;
+#&gt;  [5] &quot;387 287 6718&quot; NA             &quot;233.398.9187&quot; &quot;482 952 3315&quot;
+#&gt;  [9] &quot;239 923 8115&quot; &quot;842 566 4692&quot; &quot;579-499-7527&quot; NA            
+#&gt; [13] &quot;543.355.3679&quot;</code></pre>
+<pre class="r"><code>&gt; str_match(strings, phone)</code></pre>
+<pre><code>#&gt;       [,1]           [,2]  [,3]  [,4]  
+#&gt;  [1,] &quot;219 733 8965&quot; &quot;219&quot; &quot;733&quot; &quot;8965&quot;
+#&gt;  [2,] &quot;329-293-8753&quot; &quot;329&quot; &quot;293&quot; &quot;8753&quot;
+#&gt;  [3,] NA             NA    NA    NA    
+#&gt;  [4,] &quot;595 794 7569&quot; &quot;595&quot; &quot;794&quot; &quot;7569&quot;
+#&gt;  [5,] &quot;387 287 6718&quot; &quot;387&quot; &quot;287&quot; &quot;6718&quot;
+#&gt;  [6,] NA             NA    NA    NA    
+#&gt;  [7,] &quot;233.398.9187&quot; &quot;233&quot; &quot;398&quot; &quot;9187&quot;
+#&gt;  [8,] &quot;482 952 3315&quot; &quot;482&quot; &quot;952&quot; &quot;3315&quot;
+#&gt;  [9,] &quot;239 923 8115&quot; &quot;239&quot; &quot;923&quot; &quot;8115&quot;
+#&gt; [10,] &quot;842 566 4692&quot; &quot;842&quot; &quot;566&quot; &quot;4692&quot;
+#&gt; [11,] &quot;579-499-7527&quot; &quot;579&quot; &quot;499&quot; &quot;7527&quot;
+#&gt; [12,] NA             NA    NA    NA    
+#&gt; [13,] &quot;543.355.3679&quot; &quot;543&quot; &quot;355&quot; &quot;3679&quot;</code></pre></li>
+<li><code>str_replace(string, pattern, replacement)</code>
+<ul>
+<li>매치되지 않은 부분은 그대로 매치된 부분만 치환. <code>base::sub(pattern, replacement, x)</code> 와 대응. <code>base::gsub()</code>과 같이 모든 매치부분을 치환하기 위해서는 <code>str_replace_all()</code>을 사용.</li>
+</ul>
+<pre class="r"><code>&gt; fruits &lt;- c(&quot;one apple&quot;, &quot;two pears&quot;, &quot;three bananas&quot;)
+&gt; str_replace(fruits, &quot;[aeiou]&quot;, &quot;-&quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;-ne apple&quot;     &quot;tw- pears&quot;     &quot;thr-e bananas&quot;</code></pre>
+<pre class="r"><code>&gt; str_replace_all(fruits, &quot;[aeiou]&quot;, &quot;-&quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;-n- -ppl-&quot;     &quot;tw- p--rs&quot;     &quot;thr-- b-n-n-s&quot;</code></pre>
+<hr />
+<p>위에서 나열한 함수에서 _pattern_은 디폴트로 POSIX 정규표현식으로 취급된다. 이하의 함수를 통해 인수값을 변경할 수 있다.</p></li>
+<li><code>stringr::fixed(string)</code>
+<ul>
+<li>입력값 그대로의 문자로 매칭 시킴</li>
+</ul></li>
+<li><code>stringr::ignore.case(string)</code>
+<ul>
+<li>대문자 소문자를 무시하여 매치 시킴</li>
+</ul></li>
+<li><code>stringr::perl(string)</code>
+<ul>
+<li>Perl 정규표현식으로 취급</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="formatting" class="section level2">
+<h2>Formatting</h2>
+<ul>
+<li><code>str_trim(string, side=&quot;both&quot;)</code>
+<ul>
+<li>공백문자를 제거.</li>
+</ul></li>
+<li><code>str_pad(string, width, side=&quot;left&quot;, pad=&quot; &quot;)</code>
+<ul>
+<li>폭을 width 만큼 늘려서 side를 기준으로 공백을 pad에 지정된 문자로 채워넣음.</li>
+</ul></li>
+<li><code>str_wrap(string, width=80, indent=0, exdent=0)</code>
+<ul>
+<li>지정한 폭으로 줄바꿈. indent는 선두행의 왼쪽 여백, exdent는 그 이외 행의 왼쪽여백.</li>
+</ul></li>
+</ul>
+<p>결국은 정규표현식을 잘써야 한다는 이야기!!</p>
+<p>참고자료 : <a href="http://journal.r-project.org/archive/2010-2/RJournal_2010-2_Wickham.pdf">stringr: mordern, consistent string processing</a></p>
+</div>
