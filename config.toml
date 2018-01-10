@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "https://woosung.wsyang.com"
+baseurl = "https://blog.wsyang.com"
 #themesDir = "../.."
 title = "memoRandum for data analytics"
 theme = "hugo-cactus-theme"
