@@ -15,7 +15,7 @@
       }
     }
   }
-  var tagNames = ['img', 'embed', 'object'];
+  var tagNames = ['img', 'figure', 'embed', 'object'];
   for (var i = 0; i < tagNames.length; i++) {
     center_el(tagNames[i]);
   }
