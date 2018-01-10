@@ -32,14 +32,14 @@ $$
 
 p-값이 작은 부분에서는 형질과 SNP사이에 관련성이 있다는 대립가설에 따른다고 예상되므로 아래 그림과 같이 붉은 원 안의 p-값에 대응하는 SNP가 관련성을 시사하는 SNP가 됩니다.
 
-![](http://farm4.staticflickr.com/3698/9201427980_cf501f3dbc_o.png) 
+![](http://farm4.staticflickr.com/3698/9201427980_cf501f3dbc_o.png)
 
 ### Manhattan plot 
 
 Manhattan plot은 관련분석결과 p-값을 염색체번호, 물리적 거리순으로 늘어놓은 플롯을 말합니다.  
 여기서 주의해야 할 점은 연쇄불평형(linkage disequilibrium)관계에 있는 SNP 사이의 관련분석 결과는 p-값이 비슷하게 됨에 주목하여 형질과 SNP와의 관련성에 대해 평가해야 합니다. 다시 말해 GWAS에 사용되는 DNA chip은 SNP의 밀도가 높으므로 비슷한 위치에 있는 SNP 사이에는 연쇄불평형 관계가 존재합니다. 이런 때에는 검정의 p-값이 비슷하여지므로 아래 그림과 같이 형질과 관련성이 있는 유전자 영역에 있는 SNP들의 p-값은 고층빌딩과 같이 불쑥 솟아오른 모양이 됩니다[^1]. 
 
-[^1]그래프의 모양이 맨해튼의 마천루와 비슷하다 하여 Manhattan plot이란 이름이 붙게 되었죠.
+[^1]: 그래프의 모양이 맨해튼의 마천루와 비슷하다 하여 Manhattan plot이란 이름이 붙게 되었죠.
 
 ![](http://farm4.staticflickr.com/3803/9198649215_af7c29fd2d_o.png)
 
