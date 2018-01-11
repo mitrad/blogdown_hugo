@@ -1,0 +1,95 @@
+---
+categories:
+- R-Tips
+- 유전통계학
+comments: true
+date: 2012-11-29T00:00:00Z
+tags:
+- Annotation
+- Genome
+- NCBI
+- NCBI2R
+- R
+title: NCBI2R 패키지를 이용해 게놈 주석 불러오기
+slug: genome-annotation-using-ncbi2r-package
+---
+
+
+
+<p>관련분석(association study)을 하다 보면 필연적으로 SNP와 게놈정보를 많이 이용하게 됩니다. 보통 클라이언트에게 제출하는 분석결과 보고서에는 각 SNP에 대한 위치정보와 대응하는 유전자 이름을 같이 넣게 되는데 보통 DNA chip 제조회사가 제공하는 주석(annotation) 정보를 이용하게 됩니다.</p>
+<p>저는 관련분석 시 주로 <a href="http://pngu.mgh.harvard.edu/%7Epurcell/plink/">plink</a>의 분석 결과 파일을 R로 불러와 그래프 작성 및 보고용 파일을 만드는데, plink의 결과 파일에는 유전자에 대한 정보가 포함되어 있지 않기 때문에 별도로 DNA chip 제조회사가 제공하는 주석 파일에서 필요한 부분을 추출하여 보고용 파일을 만들곤 합니다. 대략 아래와 같이</p>
+<div class="figure">
+<img src="https://lh3.googleusercontent.com/-monEPlIDXAQ/ULcOTwzCuXI/AAAAAAAACIw/PNA54FutabQ/s512/report.png" alt="클라이언트에게 돌려 주는 결과" />
+<p class="caption">클라이언트에게 돌려 주는 결과</p>
+</div>
+<p>또한, 클라이언트에 따라 특정 유전자영역에 대해서만 분석을 의뢰하는 예도 있어서 특정 유전자 영역 내에 있는 SNP의 목록이 필요할 때도 있습니다. 이때도 보통 리눅스의 셸 스크립트를 이용하거나 R에서 작업합니다.</p>
+<p>그리고 간혹 NCBI의 <a href="http://www.ncbi.nlm.nih.gov/projects/SNP/">dbSNP</a>에 접속해 SNP 정보를 확인하는데 관련 지식이 미천한지라 제가 필요로 하는 그 이상의 정보가 존재하기 때문에 필요한 부분만 가지고 올 수 없을까 하는 생각을 했었습니다.</p>
+<div class="figure">
+<img src="https://lh5.googleusercontent.com/-ReI2cx_SJzw/ULdd4-gKYLI/AAAAAAAACKI/7X_G8_gPWjk/s550/dbSNP-2.png" alt="dbSNP 검색결과 화면" />
+<p class="caption">dbSNP 검색결과 화면</p>
+</div>
+<p>물론 R에는 온라인 데이터베이스를 탐색할 수 있는 많은 패키지가 존재하며 대표적인 것이 생물정보학을 위한 <a href="http://bioconductor.org">Bioconductor</a>라는 프로젝트입니다.</p>
+<p>그러던 중 <code>NCBI2R</code> 라는 패키지를 이용해 NCBI의 필요한 정보만을 R로 가지고 오는 방법을 알게 되어 소개하고자 합니다.</p>
+<ul>
+<li><code>NCBI2R</code> 패키지 인스톨</li>
+</ul>
+<pre class="r"><code>&gt; devtools::install_github(&quot;cran/NCBI2R&quot;)</code></pre>
+<ul>
+<li>NCBI dbDNP에서 SNP 정보 가지고 오기</li>
+</ul>
+<pre class="r"><code>&gt; library(NCBI2R)
+&gt; snplist &lt;- c(&quot;rs12345&quot;, &quot;rs333&quot;, &quot;rs624662&quot;)
+&gt; mySNPs &lt;- GetSNPInfo(snplist)</code></pre>
+<pre><code>#&gt; NCBI2R beta version. Your version: 1.4.7 Latest Release 1.4.6</code></pre>
+<pre class="r"><code>&gt; mySNPs</code></pre>
+<pre><code>#&gt;     marker        genesymbol        locusID chr   chrpos
+#&gt; 1  rs12345          CRYBB2P1           1416  22 25459492
+#&gt; 2    rs333 LOC102724297,CCR5 102724297,1234   3 46373456
+#&gt; 3 rs624662      LOC101927120      101927120  11 56853544
+#&gt;                                     fxn_class      species dupl_loc
+#&gt; 1                       nc-transcript-variant Homo sapiens         
+#&gt; 2 frameshift-variant,intron-variant,reference Homo sapiens         
+#&gt; 3                              intron-variant Homo sapiens         
+#&gt;   current.rsid flag
+#&gt; 1      rs12345    0
+#&gt; 2        rs333    0
+#&gt; 3     rs624662    0</code></pre>
+<ul>
+<li>특정 유전자 안에 있는 SNP 목록 가지고 오기</li>
+</ul>
+<pre class="r"><code>&gt; locusID &lt;- GetIDs(&quot;GNA12[SYM] human&quot;)
+&gt; mySNPs &lt;- GetSNPsInGenes(locusID)</code></pre>
+<pre><code>#&gt; Error in getListFromXML(webget, MaxRet = MaxRet, sme = sme, smt = smt): NCBI2R error: parsing XML problem</code></pre>
+<pre class="r"><code>&gt; head(mySNPs)</code></pre>
+<pre><code>#&gt;     marker        genesymbol        locusID chr   chrpos
+#&gt; 1  rs12345          CRYBB2P1           1416  22 25459492
+#&gt; 2    rs333 LOC102724297,CCR5 102724297,1234   3 46373456
+#&gt; 3 rs624662      LOC101927120      101927120  11 56853544
+#&gt;                                     fxn_class      species dupl_loc
+#&gt; 1                       nc-transcript-variant Homo sapiens         
+#&gt; 2 frameshift-variant,intron-variant,reference Homo sapiens         
+#&gt; 3                              intron-variant Homo sapiens         
+#&gt;   current.rsid flag
+#&gt; 1      rs12345    0
+#&gt; 2        rs333    0
+#&gt; 3     rs624662    0</code></pre>
+<ul>
+<li>NCBI에서 유전자 정보 가지고 오기</li>
+</ul>
+<pre class="r"><code>&gt; GetGeneInfo(locusID)</code></pre>
+<pre><code>#&gt;   locusID org_ref_taxname org_ref_commonname   OMIM     synonyms
+#&gt; 1    2768    Homo sapiens              human 604394 RMP gep NNX3
+#&gt;   genesummary                   genename phenotypes pathways GeneLowPoint
+#&gt; 1             G protein subunit alpha 12                          2728105
+#&gt;   GeneHighPoint ori chr genesymbol                               build
+#&gt; 1       2870656   -   7      GNA12 Homo sapiens Annotation Release 108
+#&gt;           cyto approx
+#&gt; 1 7p22.3-p22.2      0</code></pre>
+<ul>
+<li>HapMap 프로젝트 데이터를 이용해 LD 정보 가지고 오기</li>
+</ul>
+<pre class="r"><code>&gt; LD &lt;- GetLDInfo(&quot;4&quot;, 123456789, 123556789)
+&gt; head(LD)</code></pre>
+<p>물론 많은 양의 SNP에 대한 정보를 가지고 올 때는 시간이 오래 걸릴 수 있습니다. 그러나 관련분석 결과 통계적으로 유의한 SNP는 보통 많아야 수십 개기 때문에 <code>NCBI2R</code> 패키지를 이용해 작업하는 편이 훨씬 편리하리라 생각합니다. 다만 DNA chip 제조회사가 제공하는 주석 파일의 위치정보와 NCBI의 위치정보가 다를 수도 있으므로 주의해야 합니다. <code>NCBI2R</code> 패키지의 모든 함수목록과 사용법은 <a href="http://cran.r-project.org/web/packages/NCBI2R/index.html">이곳</a>에서 확인하실 수 있습니다.</p>
+<p><strong>참고사이트: <a href="http://www.milanor.net/blog/?p=501">Genome annotation with NCBI2R</a></strong></p>
+<p>꼬리말: 이 글은 <a href="http://www.rstudio.org">RStudio</a>와 knitr 패키지를 이용해 html 파일을 만들고 워드프레스에서 편집기에서 약간의 수정을 하였습니다. 처음부터 워드프레스 에서 글 작성하는 것에 비하면 완전 딴세상이네요. 강추!!!</p>
