@@ -46,18 +46,7 @@ slug: how-to-lie-with-statistics
 물론 개편으로 인한 소비자물가 하락 효과는 1991년 -0.3%, 1996년 -0.1%, 2001년 -0.3%, 2006년 -0.2% 등으로 이전의 개편에서도 있었다고 통계청의 보도자료는 밝히고 있습니다만 이번 개편은 유독 MB 정권 하에서의 물가지수가 혜택을 받고 있다는 느낌을 지울 수가 없습니다.
 
 게다가 2012년 3월의 소비자물가지수 상승률이 2.6%로 발표된 데 대해 실제로는 3.2%라는 민간 연구기관의 발표가 있었고, 이는 통계청의 공식 트윗 계정에서도 인정했습니다.
-
-<blockquote class="twitter-tweet tw-align-center" lang="ko">
-  <p>
-    통계청이 발표한 3월 소비자 물가 상승이 2.6%가 아니라 3.2%라는 민간연구기관의 보고서 내용은 사실, 통계청(<a href="http://t.co/K9ehOlrU" title="http://bit.ly/HteoL0">bit.ly/HteoL0</a>)과 기획재정부(<a href="http://t.co/i0Xogrju" title="http://bit.ly/HqvFiB">bit.ly/HqvFiB</a>)에서 이미 설명했던 내용입니다.
-  </p>
-  
-  <p>
-    &mdash; 통계청(StatisticsKorea) (@KOSTATIN) <a href="https://twitter.com/KOSTATIN/status/189229469595205633" data-datetime="2012-04-09T05:53:15+00:00">4월 9, 2012</a>
-  </p>
-</blockquote>
-
-
+{{< tweet 189229469595205633 >}}
 
 현실을 제대로 반영 못 하는 통계지표. 이런 지표를 이용해 목표달성 했다고 자화자찬하는 정부와 보수언론을 보면 그냥 찌질하게 보이는 건 저뿐일까요?
 
