@@ -1,0 +1,2 @@
+# Redirect domain aliases to primary domain
+https://wsyang.com/* https://blog.wsyang.com/:splat 301!
