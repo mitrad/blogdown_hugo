@@ -1,12 +1,12 @@
 # Site settings
-baseurl = "https://blog.wsyang.com"
+baseurl = "https://wsyang.com"
 #themesDir = "../.."
 title = "memoRandum for data analytics"
 theme = "hugo-cactus-theme"
 # Enter your tracking code to enable Google Analytics
 googleAnalytics = "UA-112164265-1"
 # Disable comments by leaving disqusShortname empty
-disqusShortname = "woosung-netlify-com"
+disqusShortname = "wsyangcom"
 
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
