@@ -9,6 +9,7 @@ tags:
 - 유전통계학
 title: GWAS로 배우는 유전통계학 - 5 분석결과의 시각화
 slug: genome-wide-association-analysis-part5
+draft: false
 ---
 
 ### 5. 분석결과의 시각화 
