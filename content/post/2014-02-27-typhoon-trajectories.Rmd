@@ -58,7 +58,7 @@ WP.df <- mutate(WP.basin.df,
                 Latitude = as.numeric(gsub("^ ", "", Latitude)),
                 Longitude = as.numeric(gsub("^ ", "", Longitude)),
                 Wind.WMO. = as.numeric(gsub("^ ", "", Wind.WMO.)) * 0.5144,
-                ISO_time = as.POSIXct(ISO_time),
+                ISO_time = as.POSIXct(ISO_time, tz = "UTC"),
                 Month = factor(substr(ISO_time, 6,7), labels = c(month.name))
 )
 ```
@@ -85,7 +85,7 @@ map <- ggmap(get_googlemap(center = c(lon=145, lat=40),
 
 # 태풍이동경로 1999 - 2010
 map + geom_path(data = substorms, 
-                aes(x = Longitude, y = Latitude,group = ID, colour = Wind.WMO.), 
+                aes(x = Longitude, y = Latitude, group = ID, color = Wind.WMO.), 
                 alpha = 0.5, size = 0.8) + 
   labs(x = "", y = "", colour = "Wind \n(m/sec)",
        title = "Typhoon Trajectories 1999 - 2010") +
@@ -145,7 +145,4 @@ map +
 
 그나저나 구글맵 쓸때마다 저 Sea of Japan이 참 거슬리네...
 
-> 구글아 구글아 
-> 동해를 내놓아라
-> 내어놓지 않으면
-> 구워서 먹으리.
+> 구글아 구글아 동해를 내놓아라 내어놓지 않으면 구워서 먹으리.

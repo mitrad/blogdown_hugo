@@ -31,7 +31,6 @@ draft: false
 <pre class="r"><code>&gt; install.packages(c(&quot;dplyr&quot;, &quot;hflights&quot;))</code></pre>
 <pre class="r"><code>&gt; library(dplyr)
 &gt; library(hflights)</code></pre>
-<pre><code>#&gt; Error in library(hflights): there is no package called &#39;hflights&#39;</code></pre>
 <p>dplyr 패키지의 기본이 되는 것은 다음 5개 함수입니다.</p>
 <table>
 <thead>
@@ -72,32 +71,116 @@ draft: false
 <p>여기에 <code>group_by()</code> 함수를 추가로 이용하면 그룹별로 다양한 집계를 할 수 있습니다.</p>
 <p>예제에 사용된 데이터는 미국 휴스턴에서 출발하는 모든 비행기의 2011년 이착륙기록이 수록된 것으로 227,496건의 이착륙기록에 대해 21개 항목을 수집한 데이터입니다.</p>
 <pre class="r"><code>&gt; dim(hflights)</code></pre>
-<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;hflights&#39; not found</code></pre>
+<pre><code>#&gt; [1] 227496     21</code></pre>
 <p>hflights 데이터는 관측치의 수가 많기 때문에 <code>tbl_df</code> 형식으로 변환해서 사용하는 것을 추천합니다.</p>
-<pre class="r"><code>&gt; hflights_df &lt;- tbl_df(hflights)</code></pre>
-<pre><code>#&gt; Error in as_data_frame(data): object &#39;hflights&#39; not found</code></pre>
-<pre class="r"><code>&gt; hflights_df</code></pre>
-<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;hflights_df&#39; not found</code></pre>
+<pre class="r"><code>&gt; hflights_df &lt;- tbl_df(hflights)
+&gt; hflights_df</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;  * &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011     1          1         6    1400    1500 AA           
+#&gt;  2  2011     1          2         7    1401    1501 AA           
+#&gt;  3  2011     1          3         1    1352    1502 AA           
+#&gt;  4  2011     1          4         2    1403    1513 AA           
+#&gt;  5  2011     1          5         3    1405    1507 AA           
+#&gt;  6  2011     1          6         4    1359    1503 AA           
+#&gt;  7  2011     1          7         5    1359    1509 AA           
+#&gt;  8  2011     1          8         6    1355    1454 AA           
+#&gt;  9  2011     1          9         7    1443    1554 AA           
+#&gt; 10  2011     1         10         1    1443    1553 AA           
+#&gt; # ... with 227,486 more rows, and 14 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;</code></pre>
 <p>이렇게 하면 모든 데이터를 화면에 출력하는 실수를 방지할 수 있습니다.</p>
 <div id="-filter---" class="section level3">
 <h3>함수 filter()를 이용한 데이터 추출</h3>
 <p>함수 <code>filter()</code>는 조건에 따라 행(row)을 추출합니다. 사용방법은 첫 번째 인수로 추출 대상이 되는 데이터 프레임을 지정하고, 두 번째 인수로 추출하고 싶은 행의 조건을 지정합니다. 이 서술방법은 dplyr 패키지의 다른 기본함수에도 똑같이 적용됩니다. AND 조건문 콤마(<code>,</code>)로 구별하거나 <code>&amp;</code> 연산자를 사용해도 되며 OR 조건문은 <code>|</code> 연산자를 이용합니다.</p>
 <pre class="r"><code>&gt; # 1월 1일 데이터 추출
 &gt; filter(hflights_df, Month == 1, DayofMonth == 1)</code></pre>
-<pre><code>#&gt; Error in filter(hflights_df, Month == 1, DayofMonth == 1): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 552 x 21
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011     1          1         6    1400    1500 AA           
+#&gt;  2  2011     1          1         6     728     840 AA           
+#&gt;  3  2011     1          1         6    1631    1736 AA           
+#&gt;  4  2011     1          1         6    1756    2112 AA           
+#&gt;  5  2011     1          1         6    1012    1347 AA           
+#&gt;  6  2011     1          1         6    1211    1325 AA           
+#&gt;  7  2011     1          1         6     557     906 AA           
+#&gt;  8  2011     1          1         6    1824    2106 AS           
+#&gt;  9  2011     1          1         6     654    1124 B6           
+#&gt; 10  2011     1          1         6    1639    2110 B6           
+#&gt; # ... with 542 more rows, and 14 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;</code></pre>
 <pre class="r"><code>&gt; # 1월 혹은 2월 데이터 추출
 &gt; filter(hflights_df, Month == 1 | Month == 2)</code></pre>
-<pre><code>#&gt; Error in filter(hflights_df, Month == 1 | Month == 2): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 36,038 x 21
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011     1          1         6    1400    1500 AA           
+#&gt;  2  2011     1          2         7    1401    1501 AA           
+#&gt;  3  2011     1          3         1    1352    1502 AA           
+#&gt;  4  2011     1          4         2    1403    1513 AA           
+#&gt;  5  2011     1          5         3    1405    1507 AA           
+#&gt;  6  2011     1          6         4    1359    1503 AA           
+#&gt;  7  2011     1          7         5    1359    1509 AA           
+#&gt;  8  2011     1          8         6    1355    1454 AA           
+#&gt;  9  2011     1          9         7    1443    1554 AA           
+#&gt; 10  2011     1         10         1    1443    1553 AA           
+#&gt; # ... with 36,028 more rows, and 14 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;</code></pre>
 </div>
 <div id="-arrange--" class="section level3">
 <h3>함수 arrange()를 이용한 정렬</h3>
 <p>함수 <code>arrange()</code>는 지정한 열을 기준으로 작은 값으로부터 큰 값의 순으로 데이터를 정렬합니다. 역순으로 정렬할 때는 함수 desc()를 함께 사용합니다.</p>
 <pre class="r"><code>&gt; # 데이터를 ArrDelay, Month, Year 순으로 정렬
 &gt; arrange(hflights_df, ArrDelay, Month, Year)</code></pre>
-<pre><code>#&gt; Error in arrange(hflights_df, ArrDelay, Month, Year): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011     7          3         7    1914    2039 XE           
+#&gt;  2  2011    12         25         7     741     926 OO           
+#&gt;  3  2011     8         21         7     935    1039 OO           
+#&gt;  4  2011     8         31         3     934    1039 OO           
+#&gt;  5  2011     8         26         5    2107    2205 OO           
+#&gt;  6  2011    12         24         6    2129    2337 CO           
+#&gt;  7  2011     8         28         7    2059    2206 OO           
+#&gt;  8  2011     8         29         1     935    1041 OO           
+#&gt;  9  2011     8         18         4     939    1043 OO           
+#&gt; 10  2011    12         24         6    2117    2258 CO           
+#&gt; # ... with 227,486 more rows, and 14 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;</code></pre>
 <pre class="r"><code>&gt; # 데이터를 Month의 큰 값으로 부터 작은 값 순으로 정렬
 &gt; arrange(hflights_df, desc(Month))</code></pre>
-<pre><code>#&gt; Error in arrange(hflights_df, desc(Month)): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 21
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011    12         15         4    2113    2217 AA           
+#&gt;  2  2011    12         16         5    2004    2128 AA           
+#&gt;  3  2011    12         18         7    2007    2113 AA           
+#&gt;  4  2011    12         19         1    2108    2223 AA           
+#&gt;  5  2011    12         20         2    2008    2107 AA           
+#&gt;  6  2011    12         21         3    2025    2124 AA           
+#&gt;  7  2011    12         22         4    2021    2118 AA           
+#&gt;  8  2011    12         23         5    2015    2118 AA           
+#&gt;  9  2011    12         26         1    2013    2118 AA           
+#&gt; 10  2011    12         27         2    2007    2123 AA           
+#&gt; # ... with 227,486 more rows, and 14 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;</code></pre>
 </div>
 <div id="-select-mutate---" class="section level3">
 <h3>함수 select(), mutate()를 이용한 열의 조작</h3>
@@ -105,69 +188,143 @@ draft: false
 <p>지정한 열 이외의 다른 열을 추출하고 싶을 때는 괄호 안에 제외하고 하고 싶은 열의 이름을 지정하고 괄호 앞에 <code>-</code> 부호를 붙여줍니다.</p>
 <pre class="r"><code>&gt; # Year, Month, DayOfWeek 열을 추출
 &gt; select(hflights_df, Year, Month, DayOfWeek)</code></pre>
-<pre><code>#&gt; Error in select(hflights_df, Year, Month, DayOfWeek): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 3
+#&gt;     Year Month DayOfWeek
+#&gt;  * &lt;int&gt; &lt;int&gt;     &lt;int&gt;
+#&gt;  1  2011     1         6
+#&gt;  2  2011     1         7
+#&gt;  3  2011     1         1
+#&gt;  4  2011     1         2
+#&gt;  5  2011     1         3
+#&gt;  6  2011     1         4
+#&gt;  7  2011     1         5
+#&gt;  8  2011     1         6
+#&gt;  9  2011     1         7
+#&gt; 10  2011     1         1
+#&gt; # ... with 227,486 more rows</code></pre>
 <pre class="r"><code>&gt; # Year부터 DayOfWeek까지 추출(Year, Month, DayofMonth, DayofWeek)
 &gt; select(hflights_df, Year:DayOfWeek)</code></pre>
-<pre><code>#&gt; Error in select(hflights_df, Year:DayOfWeek): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 4
+#&gt;     Year Month DayofMonth DayOfWeek
+#&gt;  * &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;
+#&gt;  1  2011     1          1         6
+#&gt;  2  2011     1          2         7
+#&gt;  3  2011     1          3         1
+#&gt;  4  2011     1          4         2
+#&gt;  5  2011     1          5         3
+#&gt;  6  2011     1          6         4
+#&gt;  7  2011     1          7         5
+#&gt;  8  2011     1          8         6
+#&gt;  9  2011     1          9         7
+#&gt; 10  2011     1         10         1
+#&gt; # ... with 227,486 more rows</code></pre>
 <pre class="r"><code>&gt; # Year부터 DayOfWeek를 제외한 나머지 열을 추출
 &gt; select(hflights_df, -(Year:DayOfWeek))</code></pre>
-<pre><code>#&gt; Error in select(hflights_df, -(Year:DayOfWeek)): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 17
+#&gt;    DepTime ArrTime UniqueCarrier FlightNum TailNum ActualElapsedTime
+#&gt;  *   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;             &lt;int&gt; &lt;chr&gt;               &lt;int&gt;
+#&gt;  1    1400    1500 AA                  428 N576AA                 60
+#&gt;  2    1401    1501 AA                  428 N557AA                 60
+#&gt;  3    1352    1502 AA                  428 N541AA                 70
+#&gt;  4    1403    1513 AA                  428 N403AA                 70
+#&gt;  5    1405    1507 AA                  428 N492AA                 62
+#&gt;  6    1359    1503 AA                  428 N262AA                 64
+#&gt;  7    1359    1509 AA                  428 N493AA                 70
+#&gt;  8    1355    1454 AA                  428 N477AA                 59
+#&gt;  9    1443    1554 AA                  428 N476AA                 71
+#&gt; 10    1443    1553 AA                  428 N504AA                 70
+#&gt; # ... with 227,486 more rows, and 11 more variables: AirTime &lt;int&gt;,
+#&gt; #   ArrDelay &lt;int&gt;, DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;,
+#&gt; #   Distance &lt;int&gt;, TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;,
+#&gt; #   CancellationCode &lt;chr&gt;, Diverted &lt;int&gt;</code></pre>
 <p>함수 mutate()는 열을 추가할 때 사용합니다.</p>
 <p>비슷한 기능을 하는 함수로 transform()이 있지만, 함수 mutate()는 함수에서 새로 만든 열을 같은 함수 안에서 바로 사용할 수 있는 장점이 있습니다. 글보다는 예제를 보는 것이 이해가 빠를 것 같습니다.</p>
 <pre class="r"><code>&gt; # 생성된 열 gain을 gain_per_hour의 계산에 사용할 수 있음
 &gt; mutate(hflights_df, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60))</code></pre>
-<pre><code>#&gt; Error in mutate(hflights_df, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60)): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 227,496 x 23
+#&gt;     Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt;     &lt;int&gt;   &lt;int&gt;   &lt;int&gt; &lt;chr&gt;        
+#&gt;  1  2011     1          1         6    1400    1500 AA           
+#&gt;  2  2011     1          2         7    1401    1501 AA           
+#&gt;  3  2011     1          3         1    1352    1502 AA           
+#&gt;  4  2011     1          4         2    1403    1513 AA           
+#&gt;  5  2011     1          5         3    1405    1507 AA           
+#&gt;  6  2011     1          6         4    1359    1503 AA           
+#&gt;  7  2011     1          7         5    1359    1509 AA           
+#&gt;  8  2011     1          8         6    1355    1454 AA           
+#&gt;  9  2011     1          9         7    1443    1554 AA           
+#&gt; 10  2011     1         10         1    1443    1553 AA           
+#&gt; # ... with 227,486 more rows, and 16 more variables: FlightNum &lt;int&gt;,
+#&gt; #   TailNum &lt;chr&gt;, ActualElapsedTime &lt;int&gt;, AirTime &lt;int&gt;, ArrDelay &lt;int&gt;,
+#&gt; #   DepDelay &lt;int&gt;, Origin &lt;chr&gt;, Dest &lt;chr&gt;, Distance &lt;int&gt;,
+#&gt; #   TaxiIn &lt;int&gt;, TaxiOut &lt;int&gt;, Cancelled &lt;int&gt;, CancellationCode &lt;chr&gt;,
+#&gt; #   Diverted &lt;int&gt;, gain &lt;int&gt;, gain_per_hour &lt;dbl&gt;</code></pre>
 <pre class="r"><code>&gt; # 생성된 열 gain을 gain_per_hour의 계산에 사용할 수 없음
 &gt; transform(hflights, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60))</code></pre>
-<pre><code>#&gt; Error in transform(hflights, gain = ArrDelay - DepDelay, gain_per_hour = gain/(AirTime/60)): object &#39;hflights&#39; not found</code></pre>
+<pre><code>#&gt; Error in eval(substitute(list(...)), `_data`, parent.frame()): object &#39;gain&#39; not found</code></pre>
 </div>
 <div id="-summarise--" class="section level3">
 <h3>함수 summarise()를 이용한 집계</h3>
 <p>함수 summarise()는 mean(), sd(), var(), median() 등의 함수를 지정하여 기초 통계량을 구할 수 있습니다. 결과값이 데이터 프레임 형식으로 돌아오는 것에 주의하세요.</p>
 <pre class="r"><code>&gt; # 평균 출발지연시간 계산
 &gt; summarise(hflights_df, delay = mean(DepDelay, na.rm = TRUE))</code></pre>
-<pre><code>#&gt; Error in summarise(hflights_df, delay = mean(DepDelay, na.rm = TRUE)): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 1 x 1
+#&gt;   delay
+#&gt;   &lt;dbl&gt;
+#&gt; 1  9.44</code></pre>
 </div>
 <div id="-group_by--" class="section level3">
 <h3>함수 group_by()를 이용한 그룹화</h3>
 <p>함수 group_by()에서 지정한 열의 수준(level)별로 그룹화된 결과를 얻을 수 있습니다.<br />
 예를 들어 비행편수 20편 이상, 평균 비행 거리 2,000마일 이상인 항공사별 평균 연착시간을 계산하여 그림으로 표현하는 코드는 다음과 같습니다.</p>
-<pre class="r"><code>&gt; planes &lt;- group_by(hflights_df, TailNum)</code></pre>
-<pre><code>#&gt; Error in group_by(hflights_df, TailNum): object &#39;hflights_df&#39; not found</code></pre>
-<pre class="r"><code>&gt; delay &lt;- summarise(planes, count = n(), 
+<pre class="r"><code>&gt; planes &lt;- group_by(hflights_df, TailNum)
+&gt; delay &lt;- summarise(planes, count = n(), 
 +                    dist = mean(Distance, na.rm = TRUE), 
-+                    delay = mean(ArrDelay, na.rm = TRUE))</code></pre>
-<pre><code>#&gt; Error in summarise(planes, count = n(), dist = mean(Distance, na.rm = TRUE), : object &#39;planes&#39; not found</code></pre>
-<pre class="r"><code>&gt; delay &lt;- filter(delay, count &gt; 20, dist &lt; 2000)</code></pre>
-<pre><code>#&gt; Error in filter(delay, count &gt; 20, dist &lt; 2000): object &#39;delay&#39; not found</code></pre>
-<pre class="r"><code>&gt; library(ggplot2)
++                    delay = mean(ArrDelay, na.rm = TRUE))
+&gt; delay &lt;- filter(delay, count &gt; 20, dist &lt; 2000)
+&gt; 
+&gt; library(ggplot2)
 &gt; ggplot(delay, aes(dist, delay)) + 
 +   geom_point(aes(size = count), alpha = 1/2) + 
 +   geom_smooth() + 
 +   scale_size_area()</code></pre>
-<pre><code>#&gt; Error in ggplot(delay, aes(dist, delay)): object &#39;delay&#39; not found</code></pre>
+<pre><code>#&gt; `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="/post/2014-02-25-introduction-to-dplyr_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>함수 group_by()의 더 많은 예제는 이 글의 참고에서 언급한 패키지 안에 포함된 소개문서를 참고하세요.</p>
 </div>
 <div id="dplyr---chain-" class="section level3">
 <h3>dplyr 패키지의 백미, chain() 함수</h3>
 <p>함수 chain() 혹은 간단히 <code>%&gt;%</code>를 이용함으로써 각 조작을 연결해서 한 번에 수행할 수 있습니다. 즉, 최종 결과를 얻기 위해 임시로 데이터 프레임을 만들지 않아도 되는 편리한 기능입니다. 개인적으로는 dplyr 패키지의 백미라고 생각합니다.</p>
 <p>지금까지 일관되게 첫 번째 인수에 데이터 프레임을 지정했습니다. 그러나 <code>%&gt;%</code>로 연결하면 가장 먼저 데이터 프레임을 지정하면 그다음부터는 인수를 생략할 수 있을 뿐 아니라 앞선 함수의 결과(데이터 프레임)를 뒤에 오는 함수의 입력값으로 사용하게 됩니다. 역시 예제를 실행해 확인해 보는 것이 좋겠죠.</p>
-<pre class="r"><code>&gt; a1 &lt;- group_by(hflights, Year, Month, DayofMonth)</code></pre>
-<pre><code>#&gt; Error in group_by(hflights, Year, Month, DayofMonth): object &#39;hflights&#39; not found</code></pre>
-<pre class="r"><code>&gt; a2 &lt;- select(a1, Year:DayofMonth, ArrDelay, DepDelay)</code></pre>
-<pre><code>#&gt; Error in select(a1, Year:DayofMonth, ArrDelay, DepDelay): object &#39;a1&#39; not found</code></pre>
-<pre class="r"><code>&gt; a3 &lt;- summarise(a2, arr = mean(ArrDelay, na.rm = TRUE), 
-+                 dep = mean(DepDelay, na.rm = TRUE))</code></pre>
-<pre><code>#&gt; Error in summarise(a2, arr = mean(ArrDelay, na.rm = TRUE), dep = mean(DepDelay, : object &#39;a2&#39; not found</code></pre>
-<pre class="r"><code>&gt; a4 &lt;- filter(a3, arr &gt; 30 | dep &gt; 30)</code></pre>
-<pre><code>#&gt; Error in filter(a3, arr &gt; 30 | dep &gt; 30): object &#39;a3&#39; not found</code></pre>
+<pre class="r"><code>&gt; a1 &lt;- group_by(hflights, Year, Month, DayofMonth)
+&gt; a2 &lt;- select(a1, Year:DayofMonth, ArrDelay, DepDelay)
+&gt; a3 &lt;- summarise(a2, arr = mean(ArrDelay, na.rm = TRUE), 
++                 dep = mean(DepDelay, na.rm = TRUE))
+&gt; a4 &lt;- filter(a3, arr &gt; 30 | dep &gt; 30)</code></pre>
 <p>위 예제는 hflights 데이터를 a1) Year, Month, DayofMonth의 수준별로 그룹화, a2) Year부터 DayofMonth, ArrDelay, DepDealy 열을 선택, a3) 평균 연착시간과 평균 출발 지연시간을 구하고, a4) 평균 연착시간과 평균 출발지연시간이 30분 이상인 데이터를 추출한 결과입니다. 위 예제를 <code>%&gt;%</code> 함수를 이용하면 다음과 같습니다.</p>
 <pre class="r"><code>&gt; hflights_df %&gt;% 
 +   group_by(Year, Month, DayofMonth) %&gt;% 
 +   summarise(arr = mean(ArrDelay, na.rm = TRUE), 
 +             dep = mean(DepDelay, na.rm = TRUE)) %&gt;% 
 +   filter(arr &gt; 30 |  dep &gt; 30)</code></pre>
-<pre><code>#&gt; Error in eval(lhs, parent, parent): object &#39;hflights_df&#39; not found</code></pre>
+<pre><code>#&gt; # A tibble: 14 x 5
+#&gt; # Groups:   Year, Month [10]
+#&gt;     Year Month DayofMonth   arr   dep
+#&gt;    &lt;int&gt; &lt;int&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt;  1  2011     2          4  44.1  47.2
+#&gt;  2  2011     3          3  35.1  38.2
+#&gt;  3  2011     3         14  46.6  36.1
+#&gt;  4  2011     4          4  38.7  27.9
+#&gt;  5  2011     4         25  37.8  22.3
+#&gt;  6  2011     5         12  69.5  64.5
+#&gt;  7  2011     5         20  37.0  26.6
+#&gt;  8  2011     6         22  65.5  62.3
+#&gt;  9  2011     7         29  29.6  31.9
+#&gt; 10  2011     9         29  39.2  32.5
+#&gt; 11  2011    10          9  61.9  59.5
+#&gt; 12  2011    11         15  43.7  39.2
+#&gt; 13  2011    12         29  26.3  30.8
+#&gt; 14  2011    12         31  46.5  54.2</code></pre>
 </div>
 </div>
 <div class="section level2">
