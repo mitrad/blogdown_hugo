@@ -36,7 +36,7 @@ options(digits = 3)
 먼저 양 시대의 방어율 분포를 Boxplot을 통해 살펴보면
 
 ```{r prompt=TRUE, warning=FALSE}
-pitcher <- read.csv("http://wsyang.com/files/pitcher.csv")
+pitcher <- read.csv("https://www.dropbox.com/s/lmwbrf3d1ow7om6/pitcher.csv?dl=1")
 boxplot(ERA ~ Decade, data = pitcher, col = c("darkred", "darkblue"),
         main = "ERA Distribution")
 ```
