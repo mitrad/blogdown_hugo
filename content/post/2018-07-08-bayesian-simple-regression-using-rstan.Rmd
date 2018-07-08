@@ -40,7 +40,10 @@ ggplot(cars, aes(x = speed, y = dist)) +
 ## 모형식의 기술
 
 단순회귀식은 다음과 같다.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3afe47461e7700a039e64aeb62c0a08157efa6ca
 $$
 Y[n] = a + bX[n] + \epsilon[n],  \\
 \epsilon[n] \sim Normal(0, \sigma), ~~n = 1, \ldots, N
