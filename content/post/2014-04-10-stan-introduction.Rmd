@@ -51,7 +51,7 @@ install.packages('inline')
 install.packages('Rcpp')
 ```
 
-```{r prompt=TRUE, message=FALSE, warning=FALSE}
+```{r prompt=TRUE, message=FALSE, warning=FALSE, eval = FALSE}
 # using library inline to compile a C++ code on the fly
 library(inline) 
 library(Rcpp)
@@ -104,14 +104,14 @@ install.packages('rstan', type = 'source')
 ### rstan을 효율적으로 사용하기 위한 옵션 
 ```{r eval=TRUE, prompt=TRUE, message=FALSE, warning=FALSE}
 library(rstan)
-set_cppo("fast")  # for best running speed
-set_cppo('debug') # make debug easier
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 ```
 
 ## Example
 [RStan Getting Started](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started#how-to-install-rstan)의 예제 1번을 따라해보고 제대로 실행 되는가 확인. 
 
-```{r prompt=TRUE, warning=FALSE}
+```{r prompt=TRUE, warning=FALSE, message=FALSE}
 schools_code <- '
   data {
     int<lower=0> J; // number of schools 

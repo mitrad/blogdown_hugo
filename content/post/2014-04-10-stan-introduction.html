@@ -1,4 +1,5 @@
 ---
+draft: yes
 title: 베이즈 추정을 위한 Stan 맛보기
 date: '2014-04-10'
 categories: R
@@ -43,7 +44,6 @@ slug: stan-introduction
 + &#39;
 &gt; hellofun &lt;- cxxfunction(body = src, includes = &#39;&#39;, plugin = &#39;Rcpp&#39;, verbose = FALSE)
 &gt; cat(hellofun(), &#39;\n&#39;) </code></pre>
-<pre><code>#&gt; hello world</code></pre>
 </div>
 <div id="rstan-" class="section level2">
 <h2>RStan의 설치</h2>
@@ -76,8 +76,8 @@ slug: stan-introduction
 <div id="rstan----" class="section level3">
 <h3>rstan을 효율적으로 사용하기 위한 옵션</h3>
 <pre class="r"><code>&gt; library(rstan)
-&gt; set_cppo(&quot;fast&quot;)  # for best running speed
-&gt; set_cppo(&#39;debug&#39;) # make debug easier</code></pre>
+&gt; rstan_options(auto_write = TRUE)
+&gt; options(mc.cores = parallel::detectCores())</code></pre>
 </div>
 </div>
 <div id="example" class="section level2">
@@ -111,255 +111,256 @@ slug: stan-introduction
 &gt; 
 &gt; fit &lt;- stan(model_code = schools_code, data = schools_dat, 
 +             iter = 1000, chains = 4)</code></pre>
-<pre><code>#&gt; In file included from file1474bfae5ac5.cpp:8:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/stan/math.hpp:4:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/stan/math/rev/core.hpp:12:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/StanHeaders/include/stan/math/rev/core/var.hpp:7:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/BH/include/boost/math/tools/config.hpp:13:
-#&gt; In file included from /usr/local/lib/R/3.4/site-library/BH/include/boost/config.hpp:39:
-#&gt; /usr/local/lib/R/3.4/site-library/BH/include/boost/config/compiler/clang.hpp:200:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]
+<pre><code>#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/gevv_vvv_vari.hpp:5:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/var.hpp:7:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/math/tools/config.hpp:13:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/config.hpp:39:
+#&gt; /usr/local/lib/R/3.5/site-library/BH/include/boost/config/compiler/clang.hpp:200:11: warning: &#39;BOOST_NO_CXX11_RVALUE_REFERENCES&#39; macro redefined [-Wmacro-redefined]
 #&gt; #  define BOOST_NO_CXX11_RVALUE_REFERENCES
 #&gt;           ^
 #&gt; &lt;command line&gt;:6:9: note: previous definition is here
 #&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #&gt;         ^
-#&gt; 1 warning generated.
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 1).
-#&gt; 
-#&gt; Gradient evaluation took 2.1e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:   1 / 1000 [  0%]  (Warmup)
-#&gt; Iteration: 100 / 1000 [ 10%]  (Warmup)
-#&gt; Iteration: 200 / 1000 [ 20%]  (Warmup)
-#&gt; Iteration: 300 / 1000 [ 30%]  (Warmup)
-#&gt; Iteration: 400 / 1000 [ 40%]  (Warmup)
-#&gt; Iteration: 500 / 1000 [ 50%]  (Warmup)
-#&gt; Iteration: 501 / 1000 [ 50%]  (Sampling)
-#&gt; Iteration: 600 / 1000 [ 60%]  (Sampling)
-#&gt; Iteration: 700 / 1000 [ 70%]  (Sampling)
-#&gt; Iteration: 800 / 1000 [ 80%]  (Sampling)
-#&gt; Iteration: 900 / 1000 [ 90%]  (Sampling)
-#&gt; Iteration: 1000 / 1000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.042864 seconds (Warm-up)
-#&gt;                0.042671 seconds (Sampling)
-#&gt;                0.085535 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 2).
-#&gt; 
-#&gt; Gradient evaluation took 7e-06 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:   1 / 1000 [  0%]  (Warmup)
-#&gt; Iteration: 100 / 1000 [ 10%]  (Warmup)
-#&gt; Iteration: 200 / 1000 [ 20%]  (Warmup)
-#&gt; Iteration: 300 / 1000 [ 30%]  (Warmup)
-#&gt; Iteration: 400 / 1000 [ 40%]  (Warmup)
-#&gt; Iteration: 500 / 1000 [ 50%]  (Warmup)
-#&gt; Iteration: 501 / 1000 [ 50%]  (Sampling)
-#&gt; Iteration: 600 / 1000 [ 60%]  (Sampling)
-#&gt; Iteration: 700 / 1000 [ 70%]  (Sampling)
-#&gt; Iteration: 800 / 1000 [ 80%]  (Sampling)
-#&gt; Iteration: 900 / 1000 [ 90%]  (Sampling)
-#&gt; Iteration: 1000 / 1000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.043324 seconds (Warm-up)
-#&gt;                0.033921 seconds (Sampling)
-#&gt;                0.077245 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 3).
-#&gt; 
-#&gt; Gradient evaluation took 7e-06 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:   1 / 1000 [  0%]  (Warmup)
-#&gt; Iteration: 100 / 1000 [ 10%]  (Warmup)
-#&gt; Iteration: 200 / 1000 [ 20%]  (Warmup)
-#&gt; Iteration: 300 / 1000 [ 30%]  (Warmup)
-#&gt; Iteration: 400 / 1000 [ 40%]  (Warmup)
-#&gt; Iteration: 500 / 1000 [ 50%]  (Warmup)
-#&gt; Iteration: 501 / 1000 [ 50%]  (Sampling)
-#&gt; Iteration: 600 / 1000 [ 60%]  (Sampling)
-#&gt; Iteration: 700 / 1000 [ 70%]  (Sampling)
-#&gt; Iteration: 800 / 1000 [ 80%]  (Sampling)
-#&gt; Iteration: 900 / 1000 [ 90%]  (Sampling)
-#&gt; Iteration: 1000 / 1000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.042925 seconds (Warm-up)
-#&gt;                0.048873 seconds (Sampling)
-#&gt;                0.091798 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 4).
-#&gt; 
-#&gt; Gradient evaluation took 1.2e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:   1 / 1000 [  0%]  (Warmup)
-#&gt; Iteration: 100 / 1000 [ 10%]  (Warmup)
-#&gt; Iteration: 200 / 1000 [ 20%]  (Warmup)
-#&gt; Iteration: 300 / 1000 [ 30%]  (Warmup)
-#&gt; Iteration: 400 / 1000 [ 40%]  (Warmup)
-#&gt; Iteration: 500 / 1000 [ 50%]  (Warmup)
-#&gt; Iteration: 501 / 1000 [ 50%]  (Sampling)
-#&gt; Iteration: 600 / 1000 [ 60%]  (Sampling)
-#&gt; Iteration: 700 / 1000 [ 70%]  (Sampling)
-#&gt; Iteration: 800 / 1000 [ 80%]  (Sampling)
-#&gt; Iteration: 900 / 1000 [ 90%]  (Sampling)
-#&gt; Iteration: 1000 / 1000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.046999 seconds (Warm-up)
-#&gt;                0.041358 seconds (Sampling)
-#&gt;                0.088357 seconds (Total)</code></pre>
-<pre class="r"><code>&gt; fit2 &lt;- stan(fit = fit, data = schools_dat, iter = 10000, chains = 4)</code></pre>
-<pre><code>#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 1).
-#&gt; 
-#&gt; Gradient evaluation took 1.1e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 10000 [  0%]  (Warmup)
-#&gt; Iteration: 1000 / 10000 [ 10%]  (Warmup)
-#&gt; Iteration: 2000 / 10000 [ 20%]  (Warmup)
-#&gt; Iteration: 3000 / 10000 [ 30%]  (Warmup)
-#&gt; Iteration: 4000 / 10000 [ 40%]  (Warmup)
-#&gt; Iteration: 5000 / 10000 [ 50%]  (Warmup)
-#&gt; Iteration: 5001 / 10000 [ 50%]  (Sampling)
-#&gt; Iteration: 6000 / 10000 [ 60%]  (Sampling)
-#&gt; Iteration: 7000 / 10000 [ 70%]  (Sampling)
-#&gt; Iteration: 8000 / 10000 [ 80%]  (Sampling)
-#&gt; Iteration: 9000 / 10000 [ 90%]  (Sampling)
-#&gt; Iteration: 10000 / 10000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.382014 seconds (Warm-up)
-#&gt;                0.589407 seconds (Sampling)
-#&gt;                0.971421 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 2).
-#&gt; 
-#&gt; Gradient evaluation took 1.3e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 10000 [  0%]  (Warmup)
-#&gt; Iteration: 1000 / 10000 [ 10%]  (Warmup)
-#&gt; Iteration: 2000 / 10000 [ 20%]  (Warmup)
-#&gt; Iteration: 3000 / 10000 [ 30%]  (Warmup)
-#&gt; Iteration: 4000 / 10000 [ 40%]  (Warmup)
-#&gt; Iteration: 5000 / 10000 [ 50%]  (Warmup)
-#&gt; Iteration: 5001 / 10000 [ 50%]  (Sampling)
-#&gt; Iteration: 6000 / 10000 [ 60%]  (Sampling)
-#&gt; Iteration: 7000 / 10000 [ 70%]  (Sampling)
-#&gt; Iteration: 8000 / 10000 [ 80%]  (Sampling)
-#&gt; Iteration: 9000 / 10000 [ 90%]  (Sampling)
-#&gt; Iteration: 10000 / 10000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.414159 seconds (Warm-up)
-#&gt;                0.471325 seconds (Sampling)
-#&gt;                0.885484 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 3).
-#&gt; 
-#&gt; Gradient evaluation took 9e-06 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.09 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 10000 [  0%]  (Warmup)
-#&gt; Iteration: 1000 / 10000 [ 10%]  (Warmup)
-#&gt; Iteration: 2000 / 10000 [ 20%]  (Warmup)
-#&gt; Iteration: 3000 / 10000 [ 30%]  (Warmup)
-#&gt; Iteration: 4000 / 10000 [ 40%]  (Warmup)
-#&gt; Iteration: 5000 / 10000 [ 50%]  (Warmup)
-#&gt; Iteration: 5001 / 10000 [ 50%]  (Sampling)
-#&gt; Iteration: 6000 / 10000 [ 60%]  (Sampling)
-#&gt; Iteration: 7000 / 10000 [ 70%]  (Sampling)
-#&gt; Iteration: 8000 / 10000 [ 80%]  (Sampling)
-#&gt; Iteration: 9000 / 10000 [ 90%]  (Sampling)
-#&gt; Iteration: 10000 / 10000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.340307 seconds (Warm-up)
-#&gt;                0.461361 seconds (Sampling)
-#&gt;                0.801668 seconds (Total)
-#&gt; 
-#&gt; 
-#&gt; SAMPLING FOR MODEL &#39;31f989ec0d689be2a4996807325a264b&#39; NOW (CHAIN 4).
-#&gt; 
-#&gt; Gradient evaluation took 1.7e-05 seconds
-#&gt; 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
-#&gt; Adjust your expectations accordingly!
-#&gt; 
-#&gt; 
-#&gt; Iteration:    1 / 10000 [  0%]  (Warmup)
-#&gt; Iteration: 1000 / 10000 [ 10%]  (Warmup)
-#&gt; Iteration: 2000 / 10000 [ 20%]  (Warmup)
-#&gt; Iteration: 3000 / 10000 [ 30%]  (Warmup)
-#&gt; Iteration: 4000 / 10000 [ 40%]  (Warmup)
-#&gt; Iteration: 5000 / 10000 [ 50%]  (Warmup)
-#&gt; Iteration: 5001 / 10000 [ 50%]  (Sampling)
-#&gt; Iteration: 6000 / 10000 [ 60%]  (Sampling)
-#&gt; Iteration: 7000 / 10000 [ 70%]  (Sampling)
-#&gt; Iteration: 8000 / 10000 [ 80%]  (Sampling)
-#&gt; Iteration: 9000 / 10000 [ 90%]  (Sampling)
-#&gt; Iteration: 10000 / 10000 [100%]  (Sampling)
-#&gt; 
-#&gt;  Elapsed Time: 0.324616 seconds (Warm-up)
-#&gt;                0.43039 seconds (Sampling)
-#&gt;                0.755006 seconds (Total)</code></pre>
-<pre class="r"><code>&gt; print(fit2)</code></pre>
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:1:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Core:531:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:2:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/LU:47:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:3:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Cholesky:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Jacobi:29:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:3:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Cholesky:43:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/QR:17:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Householder:27:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:5:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/SVD:48:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Geometry:58:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:14:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/matrix_vari.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat/fun/Eigen_NumTraits.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Dense:7:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Eigenvalues:58:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core.hpp:36:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/core/operator_unary_plus.hpp:7:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/scal/fun/constants.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/math/constants/constants.hpp:13:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/math/tools/convert_from_string.hpp:15:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/lexical_cast.hpp:32:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/lexical_cast/try_lexical_convert.hpp:42:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/lexical_cast/detail/converter_lexical.hpp:52:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/container/container_fwd.hpp:61:
+#&gt; /usr/local/lib/R/3.5/site-library/BH/include/boost/container/detail/std_fwd.hpp:27:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]
+#&gt; BOOST_MOVE_STD_NS_BEG
+#&gt; ^
+#&gt; /usr/local/lib/R/3.5/site-library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;
+#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_BEGIN_NAMESPACE_STD
+#&gt;                                  ^
+#&gt; /Library/Developer/CommandLineTools/usr/include/c++/v1/__config:390:52: note: expanded from macro &#39;_LIBCPP_BEGIN_NAMESPACE_STD&#39;
+#&gt; #define _LIBCPP_BEGIN_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {
+#&gt;                                                    ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Sparse:26:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/SparseCore:66:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Sparse:27:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/OrderingMethods:71:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Sparse:29:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/SparseCholesky:43:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Sparse:32:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/SparseQR:35:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat.hpp:83:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/prim/mat/fun/csr_extract_u.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/Sparse:33:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/IterativeLinearSolvers:46:
+#&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
+#&gt;     #pragma clang diagnostic pop
+#&gt;                              ^
+#&gt; In file included from file95554b1bba65.cpp:478:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/rstan/include/rstan/rstaninc.hpp:3:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/rstan/include/rstan/stan_fit.hpp:36:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/services/optimize/bfgs.hpp:11:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/optimization/bfgs.hpp:9:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/optimization/lbfgs_update.hpp:6:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/circular_buffer.hpp:54:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/circular_buffer/details.hpp:20:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/move/move.hpp:30:
+#&gt; In file included from /usr/local/lib/R/3.5/site-library/BH/include/boost/move/iterator.hpp:27:
+#&gt; /usr/local/lib/R/3.5/site-library/BH/include/boost/move/detail/iterator_traits.hpp:29:1: warning: inline namespaces are a C++11 feature [-Wc++11-inline-namespace]
+#&gt; BOOST_MOVE_STD_NS_BEG
+#&gt; ^
+#&gt; /usr/local/lib/R/3.5/site-library/BH/include/boost/move/detail/std_ns_begin.hpp:18:34: note: expanded from macro &#39;BOOST_MOVE_STD_NS_BEG&#39;
+#&gt;    #define BOOST_MOVE_STD_NS_BEG _LIBCPP_BEGIN_NAMESPACE_STD
+#&gt;                                  ^
+#&gt; /Library/Developer/CommandLineTools/usr/include/c++/v1/__config:390:52: note: expanded from macro &#39;_LIBCPP_BEGIN_NAMESPACE_STD&#39;
+#&gt; #define _LIBCPP_BEGIN_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {
+#&gt;                                                    ^
+#&gt; 16 warnings generated.</code></pre>
+<pre class="r"><code>&gt; fit2 &lt;- stan(fit = fit, data = schools_dat, iter = 10000, chains = 4)
+&gt; print(fit2)</code></pre>
 <pre><code>#&gt; Inference for Stan model: 31f989ec0d689be2a4996807325a264b.
 #&gt; 4 chains, each with iter=10000; warmup=5000; thin=1; 
 #&gt; post-warmup draws per chain=5000, total post-warmup draws=20000.
 #&gt; 
 #&gt;           mean se_mean   sd   2.5%   25%   50%   75% 97.5% n_eff Rhat
-#&gt; mu        7.93    0.07 5.28  -2.52  4.66  7.95 11.15 18.58  6149    1
-#&gt; tau       6.58    0.09 5.67   0.23  2.46  5.22  9.06 20.69  3904    1
-#&gt; eta[1]    0.38    0.01 0.93  -1.49 -0.23  0.40  1.02  2.15 20000    1
-#&gt; eta[2]    0.00    0.01 0.88  -1.72 -0.58  0.00  0.57  1.75 20000    1
-#&gt; eta[3]   -0.19    0.01 0.93  -1.99 -0.82 -0.20  0.42  1.67 20000    1
-#&gt; eta[4]   -0.04    0.01 0.87  -1.77 -0.62 -0.04  0.54  1.71 20000    1
-#&gt; eta[5]   -0.35    0.01 0.87  -2.05 -0.94 -0.36  0.22  1.40 14540    1
-#&gt; eta[6]   -0.22    0.01 0.89  -1.95 -0.81 -0.23  0.36  1.57 20000    1
-#&gt; eta[7]    0.34    0.01 0.89  -1.49 -0.24  0.36  0.94  2.06 20000    1
-#&gt; eta[8]    0.05    0.01 0.93  -1.79 -0.56  0.06  0.68  1.87 20000    1
-#&gt; theta[1] 11.29    0.07 8.24  -2.38  5.98 10.24 15.29 31.32 12612    1
-#&gt; theta[2]  7.92    0.04 6.33  -4.60  3.92  7.90 11.77 21.01 20000    1
-#&gt; theta[3]  6.15    0.06 7.64 -11.23  2.06  6.75 10.80 20.05 16560    1
-#&gt; theta[4]  7.60    0.05 6.54  -5.86  3.65  7.66 11.62 20.62 20000    1
-#&gt; theta[5]  5.21    0.04 6.30  -8.85  1.52  5.70  9.45 16.29 20000    1
-#&gt; theta[6]  6.17    0.05 6.70  -8.74  2.33  6.57 10.44 18.51 20000    1
-#&gt; theta[7] 10.66    0.05 6.77  -1.13  6.15 10.00 14.49 25.88 20000    1
-#&gt; theta[8]  8.48    0.06 7.86  -6.90  3.87  8.21 12.74 25.60 17026    1
-#&gt; lp__     -4.85    0.03 2.61 -10.61 -6.42 -4.63 -3.00 -0.44  5741    1
+#&gt; mu        7.90    0.06 5.14  -2.00  4.57  7.85 11.18 18.08  8161    1
+#&gt; tau       6.53    0.07 5.52   0.24  2.44  5.20  9.10 20.68  6660    1
+#&gt; eta[1]    0.39    0.01 0.94  -1.49 -0.22  0.41  1.01  2.20 20000    1
+#&gt; eta[2]    0.01    0.01 0.88  -1.72 -0.57  0.00  0.59  1.76 20000    1
+#&gt; eta[3]   -0.19    0.01 0.93  -1.99 -0.81 -0.20  0.42  1.69 20000    1
+#&gt; eta[4]   -0.03    0.01 0.87  -1.74 -0.60 -0.03  0.54  1.71 20000    1
+#&gt; eta[5]   -0.35    0.01 0.88  -2.07 -0.93 -0.36  0.20  1.46 20000    1
+#&gt; eta[6]   -0.21    0.01 0.89  -1.94 -0.80 -0.22  0.37  1.54 20000    1
+#&gt; eta[7]    0.34    0.01 0.89  -1.47 -0.24  0.34  0.93  2.08 20000    1
+#&gt; eta[8]    0.06    0.01 0.93  -1.79 -0.56  0.07  0.69  1.90 20000    1
+#&gt; theta[1] 11.38    0.07 8.37  -2.15  5.98 10.14 15.43 31.82 14423    1
+#&gt; theta[2]  7.88    0.04 6.29  -4.75  4.01  7.84 11.75 20.78 20000    1
+#&gt; theta[3]  6.15    0.05 7.68 -11.32  2.00  6.66 10.88 20.44 20000    1
+#&gt; theta[4]  7.66    0.05 6.50  -5.50  3.66  7.62 11.58 20.90 20000    1
+#&gt; theta[5]  5.14    0.04 6.27  -8.69  1.47  5.58  9.39 16.35 20000    1
+#&gt; theta[6]  6.11    0.05 6.70  -8.66  2.19  6.48 10.43 18.57 20000    1
+#&gt; theta[7] 10.59    0.05 6.78  -1.07  6.03  9.94 14.53 25.79 20000    1
+#&gt; theta[8]  8.50    0.06 7.85  -6.85  4.01  8.28 12.66 25.79 18680    1
+#&gt; lp__     -4.86    0.03 2.60 -10.58 -6.42 -4.63 -3.03 -0.40  6562    1
 #&gt; 
-#&gt; Samples were drawn using NUTS(diag_e) at Sun Jan  7 22:48:24 2018.
+#&gt; Samples were drawn using NUTS(diag_e) at Sun Jul  8 16:17:59 2018.
 #&gt; For each parameter, n_eff is a crude measure of effective sample size,
 #&gt; and Rhat is the potential scale reduction factor on split chains (at 
 #&gt; convergence, Rhat=1).</code></pre>
 <pre class="r"><code>&gt; plot(fit2)</code></pre>
-<pre><code>#&gt; &#39;pars&#39; not specified. Showing first 10 parameters by default.</code></pre>
-<pre><code>#&gt; ci_level: 0.8 (80% intervals)</code></pre>
-<pre><code>#&gt; outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="/post/2014-04-10-stan-introduction_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <pre class="r"><code>&gt; la &lt;- extract(fit2, permuted = TRUE) # return a list of arrays 
 &gt; mu &lt;- la$mu 

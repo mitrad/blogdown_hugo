@@ -1,4 +1,5 @@
 ---
+draft: yes
 title: '[R] R에서 가계도 작성하기'
 categories:
   - 유전통계학
@@ -25,8 +26,9 @@ slug: pedigree-tree-in-r
 <li>status: 사망여부 (생존=0, 사망=1)</li>
 <li>affected: 질병여부 (질병 없음=1, 질병있음=2, 불명=0 혹은 NA)</li>
 </ul>
-<pre class="r"><code>&gt; library(kinship2)
-&gt; fam1 &lt;- data.frame(
+<pre class="r"><code>&gt; library(kinship2)</code></pre>
+<pre><code>#&gt; Error in library(kinship2): there is no package called &#39;kinship2&#39;</code></pre>
+<pre class="r"><code>&gt; fam1 &lt;- data.frame(
 +       id =      c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
 +       mother =  c(0, 0, 0, 2, 2, 2, 0, 3, 3, 0, 6, 0, 10, 10, 11),
 +       father =  c(0, 0, 0, 1, 1, 1, 0, 4, 4, 0, 7, 0, 9, 9, 12),
@@ -35,7 +37,8 @@ slug: pedigree-tree-in-r
 +       affected = c(1, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1)
 + )
 &gt; ped &lt;- pedigree(id=fam1$id, dadid=fam1$father, momid=fam1$mother,
-+         sex=fam1$gender, affected=fam1$affected, status=fam1$status)
-&gt; plot(ped, main=&quot;Family1&quot;, symbolsize=1.2, cex=0.8)</code></pre>
-<p><img src="/post/2011-04-19-pedigree-tree-in-r_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
++         sex=fam1$gender, affected=fam1$affected, status=fam1$status)</code></pre>
+<pre><code>#&gt; Error in pedigree(id = fam1$id, dadid = fam1$father, momid = fam1$mother, : could not find function &quot;pedigree&quot;</code></pre>
+<pre class="r"><code>&gt; plot(ped, main=&quot;Family1&quot;, symbolsize=1.2, cex=0.8)</code></pre>
+<pre><code>#&gt; Error in plot(ped, main = &quot;Family1&quot;, symbolsize = 1.2, cex = 0.8): object &#39;ped&#39; not found</code></pre>
 <p>가계도를 작성하는 전문 소프트웨어보다는 깨끗하지 못하지만, 연쇄분석을 할 때 이용하는 ped 형식의 파일에서 간단히 가계도를 그려보는 용도로는 편리하게 사용할 수 있습니다.</p>

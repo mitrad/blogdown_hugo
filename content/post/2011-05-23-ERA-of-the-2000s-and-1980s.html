@@ -1,4 +1,5 @@
 ---
+draft: yes
 title: 1980년대와 2000년대 프로야구 투수들의 방어율 어느 쪽이 낮을까?
 categories:
   - R-Tips
@@ -21,60 +22,34 @@ slug: "ERA-of-the-2000s-and-1980s"
 <p>요즘 프로야구 투수를 보면 그 역할이 세분되어서 선발, 중간계투, 마무리의 구분이 뚜렷합니다. 80년대의 투수들은 한 번 경기에 나오면 꽤 오래 던졌던 것 같았는데 말이죠. 그래서 재미삼아 1980년대 투수들과 2000년대 투수들의 방어율을 통계분석 패키지인 R을 이용해 비교해보았습니다. 이번 비교에 이용한 자료는 한국 프로야구의 통계와 역사를 제공하는 <a href="http://www.statiz.co.kr/index.php?mid=stat_at&amp;re=1&amp;ys=1982&amp;ye=1989&amp;se=0&amp;te=&amp;tm=&amp;ty=0&amp;qu=auto&amp;po=0&amp;as=&amp;ae=&amp;hi=&amp;un=&amp;pl=&amp;da=1&amp;o1=ERAP&amp;o2=OutCount&amp;de=0&amp;lr=0&amp;tr=&amp;cv=&amp;ml=1&amp;sn=30&amp;pa=60&amp;si=&amp;cn=">스탯티즈</a>에서 제공하는 투수기록 중 통산 방어율 데이터를 이용하였습니다.</p>
 <p>1980년대에 활약했던 투수는 71명이 2000년대에는 109명의 기록이 등록되어 있습니다.<br />
 먼저 양 시대의 방어율 분포를 Boxplot을 통해 살펴보면</p>
-<pre class="r"><code>&gt; pitcher &lt;- read.csv(&quot;http://wsyang.com/files/pitcher.csv&quot;)
-&gt; boxplot(ERA ~ Decade, data = pitcher, col = c(&quot;darkred&quot;, &quot;darkblue&quot;),
+<pre class="r"><code>&gt; pitcher &lt;- read.csv(&quot;http://wsyang.com/files/pitcher.csv&quot;)</code></pre>
+<pre><code>#&gt; Error in file(file, &quot;rt&quot;): cannot open the connection to &#39;http://wsyang.com/files/pitcher.csv&#39;</code></pre>
+<pre class="r"><code>&gt; boxplot(ERA ~ Decade, data = pitcher, col = c(&quot;darkred&quot;, &quot;darkblue&quot;),
 +         main = &quot;ERA Distribution&quot;)</code></pre>
-<p><img src="/post/2011-05-23-ERA-of-the-2000s-and-1980s_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre><code>#&gt; Error in eval(m$data, parent.frame()): object &#39;pitcher&#39; not found</code></pre>
 <p>2000년대 타자들의 기술과 수준이 높아진 이유일까요? 아니면 1980년대 투수들의 능력이 우수했던 걸까요? 위 그림을 보면 1980년대 투수들의 방어율이 2000년대 투수들보다 비교적 낮음을 알 수 있습니다. 그렇다면 통계적으로 양 시대 투수들의 평균방어율은 차이가 있다고 할 수 있을까요? 두 표본집단의 평균비교를 위한 t-검정을 통해 통계적 유의성을 알아보도록 하겠습니다. 두 표본집단의 분산이 같을 때와 서로 다를 때 t-검정의 방법은 약간 달라지는데요. 분산이 같은지 알아보는 방법이 F-분포를 이용한 검정입니다.</p>
 <pre class="r"><code>&gt; var.test(ERA ~ Decade, data = pitcher)</code></pre>
-<pre><code>#&gt; 
-#&gt;  F test to compare two variances
-#&gt; 
-#&gt; data:  ERA by Decade
-#&gt; F = 1, num df = 70, denom df = 100, p-value = 1
-#&gt; alternative hypothesis: true ratio of variances is not equal to 1
-#&gt; 95 percent confidence interval:
-#&gt;  0.664 1.538
-#&gt; sample estimates:
-#&gt; ratio of variances 
-#&gt;              0.999</code></pre>
+<pre><code>#&gt; Error in eval(m$data, parent.frame()): object &#39;pitcher&#39; not found</code></pre>
 <p>검정 결과 유의확률(p-value)이 0.9898이므로 유의수준 5%에서 두 집단의 분산이 서로 같다는 가설(귀무가설)을 기각하지 못하게 됩니다. 즉, 두 집단의 분산은 같다고 할 수 있습니다. 다음으로, 두 집단의 분산이 같다는 가정하에서 t-검정은</p>
 <pre class="r"><code>&gt; t.test(ERA ~ Decade, data=pitcher, var.equal=T)</code></pre>
-<pre><code>#&gt; 
-#&gt;  Two Sample t-test
-#&gt; 
-#&gt; data:  ERA by Decade
-#&gt; t = -6, df = 200, p-value = 1e-09
-#&gt; alternative hypothesis: true difference in means is not equal to 0
-#&gt; 95 percent confidence interval:
-#&gt;  -0.861 -0.458
-#&gt; sample estimates:
-#&gt; mean in group 1980s mean in group 2000s 
-#&gt;                3.42                4.08</code></pre>
+<pre><code>#&gt; Error in eval(m$data, parent.frame()): object &#39;pitcher&#39; not found</code></pre>
 <p>결과를 보면 1980년대 투수들의 평균 방어율은 3.425, 2000년대 투수들의 평균 방어율은 4.084이고, 검정 결과 유의확률이 매우 낮으므로 통계적으로 1980년대 투수와 2000년대 투수의 평균 방어율은 차이가 있다고 할 수 있습니다.</p>
 <p>그런데 <a href="http://wsyang.com/2011/05/%EB%91%90-%ED%91%9C%EB%B3%B8%EC%A7%91%EB%8B%A8%EC%9D%98-%ED%8F%89%EA%B7%A0-%EC%B0%A8%EC%9D%B4%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B2%80%EC%A0%95-%EB%B0%A9%EB%B2%95%EB%93%A4/">앞선 포스팅</a>에서 t-검정은 표본집단에 대해 정규분포의 가정이 성립할 때에만 사용할 수 있다고 했습니다. 과연 양 시대 투수들의 방어율은 정규분포를 따르고 있을까요? 그 분포를 좀 더 자세히 보기 위해 밀도함수를 그려보면 다음과 같습니다.</p>
 <pre class="r"><code>&gt; par(mfrow = c(2, 1))
 &gt; plot(density(pitcher[which(pitcher$Decade == &quot;1980s&quot;), &quot;ERA&quot;]), col = &quot;darkred&quot;,
-+     main = &quot;1980s ERA Density&quot;, xlim = c(0.5, 6.5))
-&gt; rug(pitcher[which(pitcher$Decade == &quot;1980s&quot;), &quot;ERA&quot;], col = &quot;green&quot;)
-&gt; plot(density(pitcher[which(pitcher$Decade == &quot;2000s&quot;), &quot;ERA&quot;]), col = &quot;darkblue&quot;,
-+     main = &quot;2000s ERA Density&quot;, xlim=c(0.5, 6.5))
-&gt; rug(pitcher[which(pitcher$Decade == &quot;2000s&quot;), &quot;ERA&quot;], col=&quot;green&quot;)</code></pre>
-<p><img src="/post/2011-05-23-ERA-of-the-2000s-and-1980s_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
++     main = &quot;1980s ERA Density&quot;, xlim = c(0.5, 6.5))</code></pre>
+<pre><code>#&gt; Error in density(pitcher[which(pitcher$Decade == &quot;1980s&quot;), &quot;ERA&quot;]): object &#39;pitcher&#39; not found</code></pre>
+<pre class="r"><code>&gt; rug(pitcher[which(pitcher$Decade == &quot;1980s&quot;), &quot;ERA&quot;], col = &quot;green&quot;)</code></pre>
+<pre><code>#&gt; Error in as.vector(x): object &#39;pitcher&#39; not found</code></pre>
+<pre class="r"><code>&gt; plot(density(pitcher[which(pitcher$Decade == &quot;2000s&quot;), &quot;ERA&quot;]), col = &quot;darkblue&quot;,
++     main = &quot;2000s ERA Density&quot;, xlim=c(0.5, 6.5))</code></pre>
+<pre><code>#&gt; Error in density(pitcher[which(pitcher$Decade == &quot;2000s&quot;), &quot;ERA&quot;]): object &#39;pitcher&#39; not found</code></pre>
+<pre class="r"><code>&gt; rug(pitcher[which(pitcher$Decade == &quot;2000s&quot;), &quot;ERA&quot;], col=&quot;green&quot;)</code></pre>
+<pre><code>#&gt; Error in as.vector(x): object &#39;pitcher&#39; not found</code></pre>
 <pre class="r"><code>&gt; par(mfrow = c(1, 1))</code></pre>
 <p>두 집단 모두 분포의 중심이 한쪽으로 치우쳐 있어서 정규분포를 따른다고 하기에는 약간 모호하기도 하네요. 이럴 때는 비모수 검정방법인 Wilcoxon 순위합 검정을 이용하면 되겠죠.</p>
 <pre class="r"><code>&gt; wilcox.test(ERA ~ Decade, data=pitcher, conf.int=T)</code></pre>
-<pre><code>#&gt; 
-#&gt;  Wilcoxon rank sum test with continuity correction
-#&gt; 
-#&gt; data:  ERA by Decade
-#&gt; W = 2000, p-value = 8e-10
-#&gt; alternative hypothesis: true location shift is not equal to 0
-#&gt; 95 percent confidence interval:
-#&gt;  -0.90 -0.51
-#&gt; sample estimates:
-#&gt; difference in location 
-#&gt;                  -0.71</code></pre>
+<pre><code>#&gt; Error in eval(m$data, parent.frame()): object &#39;pitcher&#39; not found</code></pre>
 <p>Wilcoxon 순위합 검정도 t-검정의 결과와 마찬가지로 양 시대 투수들의 방어율은 차이가 있다고 할 수 있습니다.</p>
 <p>결론을 말하자면 수치상 1980년대 투수들의 평균 방어율이 2000년대 투수들의 평균 방어율보다 낮음을 알 수 있었습니다.</p>
 <p>프로야구 이야기인 줄 알고 글을 읽으신 분들께는 죄송합니다. 통계 이야기가 주가 되어 버렸네요.<br />

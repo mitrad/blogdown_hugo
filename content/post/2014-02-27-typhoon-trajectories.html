@@ -1,4 +1,5 @@
 ---
+draft: yes
 title: "태풍이동경로의 시각화"
 date: 2014-02-28
 categories: 
@@ -18,8 +19,9 @@ slug: typhoon-trajectories
 <div id="r--" class="section level3">
 <h3>R을 이용한 시각화</h3>
 <pre class="r"><code>&gt; # 패키지 불러오기
-&gt; library(ggmap)
-&gt; library(ggplot2)
+&gt; library(ggmap)</code></pre>
+<pre><code>#&gt; Error in library(ggmap): there is no package called &#39;ggmap&#39;</code></pre>
+<pre class="r"><code>&gt; library(ggplot2)
 &gt; library(dplyr)</code></pre>
 <p>우리나라에 영향을 미치는 태풍의 경로를 알아보기 위해 IBTrACS에서 Western North Pacific(WP) 지역 데이터 불러온다. 불러온 데이터의 형식이 모두 문자형이기 때문에 연도, 위도, 경도를 숫자형으로 변환. 풍속단위를 노트(knot)에서 초속(m/s)으로 변환.</p>
 <pre class="r"><code>&gt; # IBTrACS에서 Western North Pacfic(WP) 지역 데이터 불러오기 
@@ -43,17 +45,19 @@ slug: typhoon-trajectories
 +                 ISO_time = as.POSIXct(ISO_time),
 +                 Month = factor(substr(ISO_time, 6,7), labels = c(month.name))
 + )</code></pre>
+<pre><code>#&gt; Error in mutate_impl(.data, dots): Evaluation error: character string is not in a standard unambiguous format.</code></pre>
 <p>데이터에 수록된 가장 최근 기록이 2010년이기 때문에, 1999~2010년 태풍 정보만 추출하고 이름이 없는 태풍도 삭제.</p>
 <p>지도에 각 태풍의 경로를 그리기 위해 태풍 ID 생성.</p>
 <pre class="r"><code>&gt; substorms &lt;- WP.df %&gt;% 
 +   filter(Season %in% 1999:2010 &amp; !(Name == &quot;NOT NAMED&quot;)) %&gt;%
 +   mutate(ID = as.factor(paste(Name, Season, sep = &quot;.&quot;)))</code></pre>
+<pre><code>#&gt; Error in eval(lhs, parent, parent): object &#39;WP.df&#39; not found</code></pre>
 <p><strong>maps</strong> 패키지를 이용하면 참고했던 사이트의 그림과 비슷한 그림을 그릴 수 있겠지만, 지도의 윗부분이 이상하게 나와서 <strong>ggmap</strong> 패키지를 이용하기로 했다. 구글맵에서 위도 40도, 경도 145도를 중심으로 한 지도를 가져온 후, 그 위에 각 태풍의 경로를 시각화.</p>
 <pre class="r"><code>&gt; map &lt;- ggmap(get_googlemap(center = c(lon=145, lat=40), 
 +                            zoom=3, maptype=&quot;terrain&quot;,
-+                            color=&quot;bw&quot;, scale=2), extent=&quot;device&quot;)
-&gt; 
-&gt; # 태풍이동경로 1999 - 2010
++                            color=&quot;bw&quot;, scale=2), extent=&quot;device&quot;)</code></pre>
+<pre><code>#&gt; Error in ggmap(get_googlemap(center = c(lon = 145, lat = 40), zoom = 3, : could not find function &quot;ggmap&quot;</code></pre>
+<pre class="r"><code>&gt; # 태풍이동경로 1999 - 2010
 &gt; map + geom_path(data = substorms, 
 +                 aes(x = Longitude, y = Latitude,group = ID, colour = Wind.WMO.), 
 +                 alpha = 0.5, size = 0.8) + 
@@ -63,7 +67,7 @@ slug: typhoon-trajectories
 +         axis.text.x = element_blank(), 
 +         axis.text.y = element_blank(), axis.ticks = element_blank(), 
 +         panel.grid.major = element_blank(), panel.grid.minor = element_blank())</code></pre>
-<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;map&#39; not found</code></pre>
 <p>함수 <code>ggplot2::facet_warp</code>를 사용하여 연도별, 월별 태풍 이동 경로를 시각화</p>
 <pre class="r"><code>&gt; map + 
 +   geom_path(
@@ -85,7 +89,7 @@ slug: typhoon-trajectories
 +     panel.grid.major = element_blank(), 
 +     panel.grid.minor = element_blank()
 +   ) </code></pre>
-<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;map&#39; not found</code></pre>
 <pre class="r"><code>&gt; map + 
 +   geom_path(
 +     data = substorms, 
@@ -105,7 +109,7 @@ slug: typhoon-trajectories
 +     panel.grid.major = element_blank(), 
 +     panel.grid.minor = element_blank()
 +   ) </code></pre>
-<p><img src="/post/2014-02-27-typhoon-trajectories_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;map&#39; not found</code></pre>
 <p>그나저나 구글맵 쓸때마다 저 Sea of Japan이 참 거슬리네…</p>
 <blockquote>
 <p>구글아 구글아 동해를 내놓아라 내어놓지 않으면 구워서 먹으리.</p>

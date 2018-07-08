@@ -1,4 +1,5 @@
 ---
+draft: yes
 categories:
 - R-Tips
 - 유전통계학
@@ -37,42 +38,22 @@ slug: genome-annotation-using-ncbi2r-package
 <ul>
 <li>NCBI dbDNP에서 SNP 정보 가지고 오기</li>
 </ul>
-<pre class="r"><code>&gt; library(NCBI2R)
-&gt; snplist &lt;- c(&quot;rs12345&quot;, &quot;rs333&quot;, &quot;rs624662&quot;)
+<pre class="r"><code>&gt; library(NCBI2R)</code></pre>
+<pre><code>#&gt; Error in library(NCBI2R): there is no package called &#39;NCBI2R&#39;</code></pre>
+<pre class="r"><code>&gt; snplist &lt;- c(&quot;rs12345&quot;, &quot;rs333&quot;, &quot;rs624662&quot;)
 &gt; mySNPs &lt;- GetSNPInfo(snplist)</code></pre>
-<pre><code>#&gt; NCBI2R beta version. Your version: 1.4.7 Latest Release 1.4.6</code></pre>
+<pre><code>#&gt; Error in GetSNPInfo(snplist): could not find function &quot;GetSNPInfo&quot;</code></pre>
 <pre class="r"><code>&gt; mySNPs</code></pre>
-<pre><code>#&gt;     marker        genesymbol        locusID chr   chrpos
-#&gt; 1  rs12345          CRYBB2P1           1416  22 25459492
-#&gt; 2    rs333 LOC102724297,CCR5 102724297,1234   3 46373456
-#&gt; 3 rs624662      LOC101927120      101927120  11 56853544
-#&gt;                                     fxn_class      species dupl_loc
-#&gt; 1                       nc-transcript-variant Homo sapiens         
-#&gt; 2 frameshift-variant,intron-variant,reference Homo sapiens         
-#&gt; 3                              intron-variant Homo sapiens         
-#&gt;   current.rsid flag
-#&gt; 1      rs12345    0
-#&gt; 2        rs333    0
-#&gt; 3     rs624662    0</code></pre>
+<pre><code>#&gt; Error in eval(expr, envir, enclos): object &#39;mySNPs&#39; not found</code></pre>
 <ul>
 <li>특정 유전자 안에 있는 SNP 목록 가지고 오기</li>
 </ul>
-<pre class="r"><code>&gt; locusID &lt;- GetIDs(&quot;GNA12[SYM] human&quot;)
-&gt; mySNPs &lt;- GetSNPsInGenes(locusID)</code></pre>
-<pre><code>#&gt; Error in getListFromXML(webget, MaxRet = MaxRet, sme = sme, smt = smt): NCBI2R error: parsing XML problem</code></pre>
+<pre class="r"><code>&gt; locusID &lt;- GetIDs(&quot;GNA12[SYM] human&quot;)</code></pre>
+<pre><code>#&gt; Error in GetIDs(&quot;GNA12[SYM] human&quot;): could not find function &quot;GetIDs&quot;</code></pre>
+<pre class="r"><code>&gt; mySNPs &lt;- GetSNPsInGenes(locusID)</code></pre>
+<pre><code>#&gt; Error in GetSNPsInGenes(locusID): could not find function &quot;GetSNPsInGenes&quot;</code></pre>
 <pre class="r"><code>&gt; head(mySNPs)</code></pre>
-<pre><code>#&gt;     marker        genesymbol        locusID chr   chrpos
-#&gt; 1  rs12345          CRYBB2P1           1416  22 25459492
-#&gt; 2    rs333 LOC102724297,CCR5 102724297,1234   3 46373456
-#&gt; 3 rs624662      LOC101927120      101927120  11 56853544
-#&gt;                                     fxn_class      species dupl_loc
-#&gt; 1                       nc-transcript-variant Homo sapiens         
-#&gt; 2 frameshift-variant,intron-variant,reference Homo sapiens         
-#&gt; 3                              intron-variant Homo sapiens         
-#&gt;   current.rsid flag
-#&gt; 1      rs12345    0
-#&gt; 2        rs333    0
-#&gt; 3     rs624662    0</code></pre>
+<pre><code>#&gt; Error in head(mySNPs): object &#39;mySNPs&#39; not found</code></pre>
 <ul>
 <li>NCBI에서 유전자 정보 가지고 오기</li>
 </ul>
