@@ -12,6 +12,7 @@ tags:
 - R
 title: NCBI2R 패키지를 이용해 게놈 주석 불러오기
 slug: genome-annotation-using-ncbi2r-package
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

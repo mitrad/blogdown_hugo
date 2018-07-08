@@ -9,6 +9,7 @@ tags:
 - 유전통계학
 title: GWAS로 배우는 유전통계학 - 3.1 코호트 연구와 실험-대조군 연구
 slug: genome-wide-association-analysis-part3-1
+draft: false
 ---
 
 ### 3. Genome-wide association study 

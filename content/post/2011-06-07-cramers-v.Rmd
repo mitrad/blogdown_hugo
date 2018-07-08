@@ -10,6 +10,7 @@ tags:
   - 연관성의 척도
 date: 2011-03-04
 slug: cramers-v
+draft: false
 ---
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
 knitr::opts_chunk$set(

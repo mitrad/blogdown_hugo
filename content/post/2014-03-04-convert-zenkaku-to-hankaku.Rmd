@@ -4,6 +4,7 @@ date: 2014-03-04
 categories: R
 tags: [R, Nippon package]
 slug: convert-zenkaku-to-hankaku
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

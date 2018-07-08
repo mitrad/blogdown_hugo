@@ -7,6 +7,7 @@ tags:
   - pedigree chart
 date: 2011-04-10
 slug: pedigree-tree-in-r
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

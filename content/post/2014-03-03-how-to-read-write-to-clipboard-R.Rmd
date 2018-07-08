@@ -4,6 +4,7 @@ date: 2014-03-03
 categories: R
 tags: [R, base, clipboard]
 slug: how-to-read-write-to-clipboard-in-r
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

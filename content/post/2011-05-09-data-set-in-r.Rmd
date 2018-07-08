@@ -12,6 +12,7 @@ tags:
   - 데이터 형태
 date: 2011-05-09
 slug: "data-set-in-r"
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

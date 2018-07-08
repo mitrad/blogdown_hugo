@@ -11,6 +11,7 @@ tags:
   - 프로야구
 date: 2011-05-23
 slug: "ERA-of-the-2000s-and-1980s"
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

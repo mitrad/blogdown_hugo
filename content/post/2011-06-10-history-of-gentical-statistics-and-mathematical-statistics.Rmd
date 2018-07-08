@@ -7,6 +7,7 @@ tags:
 - 유전통계학
 title: 유전통계학과 수리통계학의 역사
 slug: history-of-genetical-statistics-and-mathematical-statistics
+draft: false
 ---
 
 유전학과 통계학은 유사점이 많은 학문입니다. 실제로 19세기 후반, 20세기 초반의 유명한 통계학자인 Francis Galton, Karl Pearson, R.A Fisher 등은 유명한 유전학자이기도 합니다. 이번 포스트에서는 각각의 학문이 어떻게 시작되고, 어떠한 경로로 지금에 이르렀는지 살펴보도록 하겠습니다.

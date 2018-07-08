@@ -6,6 +6,7 @@ categories:
 tags:
   - R-Tips
 slug: what-is-r
+draft: false
 ---
 
 ## R 소개

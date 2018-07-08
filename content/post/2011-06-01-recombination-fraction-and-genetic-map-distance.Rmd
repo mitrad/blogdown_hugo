@@ -14,6 +14,7 @@ tags:
 - 재조합비율
 title: '[유전통계학] 재조합비율과 거리'
 slug: recombination-fraction-and-genetic-map-distance
+draft: false
 ---
 
 **재조합비율(recombination fraction)**은 한 번의 감수분열에서 두 유전자 좌 사이에 재조합이 일어날 확률로 정의됩니다. 확률이므로 0에서 1 사이의 값을 가지는 것이 당연하지만 통상 $0 \leq \theta \leq 0.5$의 값을 가집니다. 이는 유전자 좌 사이가 멀리 떨어져 있으면 교차로 인해 재조합이 일어날 확률이 높아지지만 또 한 번 교차가 일어나 재조합이 한 번 더 일어날 확률도 높아지기 때문입니다.

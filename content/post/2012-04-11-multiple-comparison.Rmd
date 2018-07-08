@@ -11,6 +11,7 @@ tags:
 - 다중비교문제
 title: GWAS로 배우는 유전통계학 - 4 다중비교 문제
 slug: genome-wide-association-analysis-part4
+draft: false
 ---
 
 ## 4. 다중비교(multiple comparison) 문제

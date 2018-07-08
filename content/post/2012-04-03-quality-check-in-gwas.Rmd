@@ -9,6 +9,7 @@ tags:
 - 품질평가
 title: GWAS로 배우는 유전통계학 - 2.3 게놈 데이터의 품질평가
 slug: genome-wide-association-analysis-part2-3
+draft: false
 ---
 
 ### 2.3 게놈 데이터의 품질평가 

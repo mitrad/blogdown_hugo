@@ -8,6 +8,7 @@ tags:
   - violin plot
 date: 2011-04-25
 slug: "violin-plot-in-r"
+draft: false
 ---
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
 knitr::opts_chunk$set(

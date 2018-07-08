@@ -6,6 +6,7 @@ tags:
    ["R-Tips"] 
 date: 2008-06-27
 slug: how-to-remove-duplicated-packages
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

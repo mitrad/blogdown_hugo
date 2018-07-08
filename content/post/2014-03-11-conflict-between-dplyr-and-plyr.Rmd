@@ -4,6 +4,7 @@ date: 2014-03-11
 categories: R
 tags: [R, dplyr, plyr]
 slug: conflict-between-dplyr-and-plyr
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

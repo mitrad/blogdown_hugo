@@ -9,6 +9,7 @@ tags:
 - 상자 수염 그림
 title: Box plot에 좀더 많은 정보를 담아보자
 slug: add-more-info-to-the-boxplot
+draft: false
 ---
 
 데이터 분석할 때 무엇을 가장 먼저 하세요?
