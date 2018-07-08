@@ -8,6 +8,7 @@ tags:
   - rstan
   - regression
   - bayesian
+draft: false
 ---
 
 ```{r setup, include=FALSE}
