@@ -20,17 +20,16 @@ draft: false
 <pre class="r"><code>&gt; install.packages(&quot;vioplot&quot;)</code></pre>
 <p>여기서는 표준정규분포의 boxplot과 violin plot을, 그리고 자유도 1인 카이제곱분포의 두 plot을 비교해 보도록 하겠습니다.</p>
 <pre class="r"><code>&gt; library(vioplot)</code></pre>
-<pre><code>#&gt; Error in library(vioplot): there is no package called &#39;vioplot&#39;</code></pre>
+<pre><code>#&gt; Loading required package: sm</code></pre>
+<pre><code>#&gt; Package &#39;sm&#39;, version 2.2-5.5: type help(sm) for summary information</code></pre>
 <pre class="r"><code>&gt; par(mfrow=c(1, 2))
 &gt; x1 &lt;- rnorm(2000, 0,1)
 &gt; boxplot(x1)
 &gt; vioplot(x1, col=&quot;red&quot;)</code></pre>
-<pre><code>#&gt; Error in vioplot(x1, col = &quot;red&quot;): could not find function &quot;vioplot&quot;</code></pre>
 <p><img src="/post/2011-04-25-violin-plot-in-R_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>&gt; par(mfrow = c(1, 2))
 &gt; x2 &lt;- rchisq(2000, df=1)
 &gt; boxplot(x2)
 &gt; vioplot(x2, col = &quot;red&quot;)</code></pre>
-<pre><code>#&gt; Error in vioplot(x2, col = &quot;red&quot;): could not find function &quot;vioplot&quot;</code></pre>
 <p><img src="/post/2011-04-25-violin-plot-in-R_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>저는 구관이 명관이라고 boxplot을 더 선호하긴 합니다만, 분포를 한 눈에 파악할 수 있다는 점에서 violin plot도 괜찮은 선택이라고 생각합니다.</p>
