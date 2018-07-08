@@ -6,6 +6,7 @@ tags:
   - R
   - Stan
 slug: stan-introduction
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

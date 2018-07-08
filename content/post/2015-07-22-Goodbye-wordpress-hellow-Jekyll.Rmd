@@ -8,6 +8,7 @@ tags:
   - knitr
   - Jekyll
 slug: Goodbye-wordpress-hellow-Jekyll
+draft: false
 ---
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}

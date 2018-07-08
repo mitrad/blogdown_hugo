@@ -1,5 +1,4 @@
 ---
-draft: yes
 title: 베이즈 추정을 위한 Stan 맛보기
 date: '2014-04-10'
 categories: R
@@ -7,6 +6,7 @@ tags:
   - R
   - Stan
 slug: stan-introduction
+draft: false
 ---
 
 
@@ -111,7 +111,7 @@ slug: stan-introduction
 &gt; 
 &gt; fit &lt;- stan(model_code = schools_code, data = schools_dat, 
 +             iter = 1000, chains = 4)</code></pre>
-<pre><code>#&gt; In file included from file95554b1bba65.cpp:8:
+<pre><code>#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -126,7 +126,7 @@ slug: stan-introduction
 #&gt; &lt;command line&gt;:6:9: note: previous definition is here
 #&gt; #define BOOST_NO_CXX11_RVALUE_REFERENCES 1
 #&gt;         ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -139,7 +139,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -152,7 +152,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -166,7 +166,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -179,7 +179,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -193,7 +193,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -206,7 +206,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -219,7 +219,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -232,7 +232,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:4:
@@ -254,7 +254,7 @@ slug: stan-introduction
 #&gt; /Library/Developer/CommandLineTools/usr/include/c++/v1/__config:390:52: note: expanded from macro &#39;_LIBCPP_BEGIN_NAMESPACE_STD&#39;
 #&gt; #define _LIBCPP_BEGIN_NAMESPACE_STD namespace std {inline namespace _LIBCPP_NAMESPACE {
 #&gt;                                                    ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
@@ -265,7 +265,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
@@ -276,7 +276,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
@@ -287,7 +287,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
@@ -298,7 +298,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:8:
+#&gt; In file included from filecf142518d779.cpp:8:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/model/model_header.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math.hpp:4:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/stan/math/rev/mat.hpp:12:
@@ -309,7 +309,7 @@ slug: stan-introduction
 #&gt; /usr/local/lib/R/3.5/site-library/RcppEigen/include/Eigen/src/Core/util/ReenableStupidWarnings.h:10:30: warning: pragma diagnostic pop could not pop, no matching push [-Wunknown-pragmas]
 #&gt;     #pragma clang diagnostic pop
 #&gt;                              ^
-#&gt; In file included from file95554b1bba65.cpp:478:
+#&gt; In file included from filecf142518d779.cpp:478:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/rstan/include/rstan/rstaninc.hpp:3:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/rstan/include/rstan/stan_fit.hpp:36:
 #&gt; In file included from /usr/local/lib/R/3.5/site-library/StanHeaders/include/src/stan/services/optimize/bfgs.hpp:11:
@@ -336,27 +336,27 @@ slug: stan-introduction
 #&gt; post-warmup draws per chain=5000, total post-warmup draws=20000.
 #&gt; 
 #&gt;           mean se_mean   sd   2.5%   25%   50%   75% 97.5% n_eff Rhat
-#&gt; mu        7.90    0.06 5.14  -2.00  4.57  7.85 11.18 18.08  8161    1
-#&gt; tau       6.53    0.07 5.52   0.24  2.44  5.20  9.10 20.68  6660    1
-#&gt; eta[1]    0.39    0.01 0.94  -1.49 -0.22  0.41  1.01  2.20 20000    1
-#&gt; eta[2]    0.01    0.01 0.88  -1.72 -0.57  0.00  0.59  1.76 20000    1
-#&gt; eta[3]   -0.19    0.01 0.93  -1.99 -0.81 -0.20  0.42  1.69 20000    1
-#&gt; eta[4]   -0.03    0.01 0.87  -1.74 -0.60 -0.03  0.54  1.71 20000    1
-#&gt; eta[5]   -0.35    0.01 0.88  -2.07 -0.93 -0.36  0.20  1.46 20000    1
-#&gt; eta[6]   -0.21    0.01 0.89  -1.94 -0.80 -0.22  0.37  1.54 20000    1
-#&gt; eta[7]    0.34    0.01 0.89  -1.47 -0.24  0.34  0.93  2.08 20000    1
-#&gt; eta[8]    0.06    0.01 0.93  -1.79 -0.56  0.07  0.69  1.90 20000    1
-#&gt; theta[1] 11.38    0.07 8.37  -2.15  5.98 10.14 15.43 31.82 14423    1
-#&gt; theta[2]  7.88    0.04 6.29  -4.75  4.01  7.84 11.75 20.78 20000    1
-#&gt; theta[3]  6.15    0.05 7.68 -11.32  2.00  6.66 10.88 20.44 20000    1
-#&gt; theta[4]  7.66    0.05 6.50  -5.50  3.66  7.62 11.58 20.90 20000    1
-#&gt; theta[5]  5.14    0.04 6.27  -8.69  1.47  5.58  9.39 16.35 20000    1
-#&gt; theta[6]  6.11    0.05 6.70  -8.66  2.19  6.48 10.43 18.57 20000    1
-#&gt; theta[7] 10.59    0.05 6.78  -1.07  6.03  9.94 14.53 25.79 20000    1
-#&gt; theta[8]  8.50    0.06 7.85  -6.85  4.01  8.28 12.66 25.79 18680    1
-#&gt; lp__     -4.86    0.03 2.60 -10.58 -6.42 -4.63 -3.03 -0.40  6562    1
+#&gt; mu        7.91    0.06 5.18  -2.29  4.67  7.90 11.16 18.26  7972    1
+#&gt; tau       6.60    0.09 5.79   0.25  2.50  5.23  9.11 20.83  4403    1
+#&gt; eta[1]    0.38    0.01 0.93  -1.51 -0.23  0.40  1.01  2.20 20000    1
+#&gt; eta[2]    0.00    0.01 0.87  -1.74 -0.56 -0.01  0.56  1.72 20000    1
+#&gt; eta[3]   -0.19    0.01 0.94  -2.02 -0.82 -0.20  0.44  1.64 20000    1
+#&gt; eta[4]   -0.03    0.01 0.88  -1.76 -0.61 -0.03  0.55  1.73 20000    1
+#&gt; eta[5]   -0.34    0.01 0.87  -2.03 -0.92 -0.36  0.22  1.41 20000    1
+#&gt; eta[6]   -0.21    0.01 0.90  -1.97 -0.80 -0.23  0.36  1.61 20000    1
+#&gt; eta[7]    0.34    0.01 0.90  -1.49 -0.24  0.36  0.95  2.07 20000    1
+#&gt; eta[8]    0.07    0.01 0.93  -1.76 -0.55  0.08  0.70  1.90 20000    1
+#&gt; theta[1] 11.28    0.07 8.22  -2.15  5.97 10.13 15.36 31.22 13697    1
+#&gt; theta[2]  7.89    0.04 6.21  -4.52  3.98  7.87 11.72 20.59 20000    1
+#&gt; theta[3]  6.23    0.06 7.85 -11.11  2.05  6.73 10.91 21.09 15566    1
+#&gt; theta[4]  7.69    0.05 6.51  -5.52  3.71  7.63 11.68 20.79 20000    1
+#&gt; theta[5]  5.18    0.04 6.31  -8.72  1.52  5.65  9.34 16.73 20000    1
+#&gt; theta[6]  6.12    0.05 6.77  -8.69  2.23  6.51 10.51 18.65 20000    1
+#&gt; theta[7] 10.69    0.05 6.82  -1.14  6.05 10.00 14.65 26.06 20000    1
+#&gt; theta[8]  8.54    0.07 7.86  -6.92  4.03  8.26 12.79 25.51 13495    1
+#&gt; lp__     -4.88    0.03 2.65 -10.75 -6.48 -4.63 -3.01 -0.46  6280    1
 #&gt; 
-#&gt; Samples were drawn using NUTS(diag_e) at Sun Jul  8 16:17:59 2018.
+#&gt; Samples were drawn using NUTS(diag_e) at Sun Jul  8 20:03:55 2018.
 #&gt; For each parameter, n_eff is a crude measure of effective sample size,
 #&gt; and Rhat is the potential scale reduction factor on split chains (at 
 #&gt; convergence, Rhat=1).</code></pre>
