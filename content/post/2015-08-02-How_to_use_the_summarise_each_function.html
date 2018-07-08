@@ -1,4 +1,5 @@
 ---
+draft: yes
 title: '[R] dplyr 패키지의 _at 함수들'
 date: 2015-08-02
 categories:
@@ -28,10 +29,10 @@ slug: How_to_use_the_summarise_at_function
 +   max.sl=max(Sepal.Length))</code></pre>
 <pre><code>#&gt; # A tibble: 3 x 5
 #&gt;   Species    min.sl mean.sl median.sl max.sl
-#&gt;   &lt;fctr&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
-#&gt; 1 setosa       4.30    5.01      5.00   5.80
-#&gt; 2 versicolor   4.90    5.94      5.90   7.00
-#&gt; 3 virginica    4.90    6.59      6.50   7.90</code></pre>
+#&gt;   &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1 setosa        4.3    5.01       5      5.8
+#&gt; 2 versicolor    4.9    5.94       5.9    7  
+#&gt; 3 virginica     4.9    6.59       6.5    7.9</code></pre>
 <p>하나의 변수라면 이 정도야 하고 넘어가겠지만, 이것이 여러 변수에 같은 처리를 하고자 하면 갑자기 암울해 지고 일하기 싫어지기 마련이다.</p>
 <pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
 +   summarise(min.sl=min(Sepal.Length),
@@ -43,20 +44,23 @@ slug: How_to_use_the_summarise_at_function
 +             median.sw=median(Sepal.Width),
 +             max.sw=max(Sepal.Width)) </code></pre>
 <pre><code>#&gt; # A tibble: 3 x 9
-#&gt;   Species    min.sl mean.sl median.sl max.sl min.sw mean.sw median.… max.…
-#&gt;   &lt;fctr&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 setosa       4.30    5.01      5.00   5.80   2.30    3.43     3.40  4.40
-#&gt; 2 versicolor   4.90    5.94      5.90   7.00   2.00    2.77     2.80  3.40
-#&gt; 3 virginica    4.90    6.59      6.50   7.90   2.20    2.97     3.00  3.80</code></pre>
+#&gt;   Species  min.sl mean.sl median.sl max.sl min.sw mean.sw median.sw max.sw
+#&gt;   &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1 setosa      4.3    5.01       5      5.8    2.3    3.43       3.4    4.4
+#&gt; 2 versico…    4.9    5.94       5.9    7      2      2.77       2.8    3.4
+#&gt; 3 virgini…    4.9    6.59       6.5    7.9    2.2    2.97       3      3.8</code></pre>
 <p>요즘 우리나라 언론에서 절찬리에 사용되고 있는 Copy &amp; Paste 기술을 시전하여 변수명만 바꾸면 되겠지만, 이것도 중간에 빼먹고 바꾸지 않은 변수가 섞여 있기도 쉽고 일단 하다 보면 귀찮다. 이럴 때 함수 <code>summarise_at()</code>를 이용하면 간단하게 처리할 수 있다.</p>
 <pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
 +   summarise_at(vars(Sepal.Length, Sepal.Width), funs(min, mean, median, max))</code></pre>
 <pre><code>#&gt; # A tibble: 3 x 9
-#&gt;   Species    Sepal.Length_min Sepal… Sepal… Sepal… Sepa… Sepa… Sepa… Sepa…
-#&gt;   &lt;fctr&gt;                &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 setosa                 4.30   2.30   5.01   3.43  5.00  3.40  5.80  4.40
-#&gt; 2 versicolor             4.90   2.00   5.94   2.77  5.90  2.80  7.00  3.40
-#&gt; 3 virginica              4.90   2.20   6.59   2.97  6.50  3.00  7.90  3.80</code></pre>
+#&gt;   Species    Sepal.Length_min Sepal.Width_min Sepal.Length_mean
+#&gt;   &lt;fct&gt;                 &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;
+#&gt; 1 setosa                  4.3             2.3              5.01
+#&gt; 2 versicolor              4.9             2                5.94
+#&gt; 3 virginica               4.9             2.2              6.59
+#&gt; # ... with 5 more variables: Sepal.Width_mean &lt;dbl&gt;,
+#&gt; #   Sepal.Length_median &lt;dbl&gt;, Sepal.Width_median &lt;dbl&gt;,
+#&gt; #   Sepal.Length_max &lt;dbl&gt;, Sepal.Width_max &lt;dbl&gt;</code></pre>
 <p>함수 <code>summarise_at()</code>의 첫번째 인자에 대상이 되는 변수를 나열하고, 구하고 싶은 함수를 <code>funs()</code>안에 넣으면 된다.</p>
 <div id="mutate_at-" class="section level3">
 <h3>mutate_at() 사용법</h3>
@@ -64,20 +68,22 @@ slug: How_to_use_the_summarise_at_function
 <pre class="r"><code>&gt; iris %&gt;% group_by(Species) %&gt;% 
 +   mutate_at(vars(Sepal.Length, Sepal.Width), funs(min_rank, cume_dist))</code></pre>
 <pre><code>#&gt; # A tibble: 150 x 9
-#&gt; # Groups: Species [3]
-#&gt;    Sepal.Length Sepal.Width Petal… Petal… Speci… Sepa… Sepa… Sepal… Sepal…
-#&gt;           &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;fctr&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-#&gt;  1         5.10        3.50   1.40  0.200 setosa    29    29 0.720  0.680 
-#&gt;  2         4.90        3.00   1.40  0.200 setosa    17     3 0.400  0.160 
-#&gt;  3         4.70        3.20   1.30  0.200 setosa    10    13 0.220  0.340 
-#&gt;  4         4.60        3.10   1.50  0.200 setosa     6     9 0.180  0.240 
-#&gt;  5         5.00        3.60   1.40  0.200 setosa    21    35 0.560  0.740 
-#&gt;  6         5.40        3.90   1.70  0.400 setosa    41    45 0.900  0.920 
-#&gt;  7         4.60        3.40   1.40  0.300 setosa     6    20 0.180  0.560 
-#&gt;  8         5.00        3.40   1.50  0.200 setosa    21    20 0.560  0.560 
-#&gt;  9         4.40        2.90   1.40  0.200 setosa     2     2 0.0800 0.0400
-#&gt; 10         4.90        3.10   1.50  0.100 setosa    17     9 0.400  0.240 
-#&gt; # ... with 140 more rows</code></pre>
+#&gt; # Groups:   Species [3]
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt;           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+#&gt;  1          5.1         3.5          1.4         0.2 setosa 
+#&gt;  2          4.9         3            1.4         0.2 setosa 
+#&gt;  3          4.7         3.2          1.3         0.2 setosa 
+#&gt;  4          4.6         3.1          1.5         0.2 setosa 
+#&gt;  5          5           3.6          1.4         0.2 setosa 
+#&gt;  6          5.4         3.9          1.7         0.4 setosa 
+#&gt;  7          4.6         3.4          1.4         0.3 setosa 
+#&gt;  8          5           3.4          1.5         0.2 setosa 
+#&gt;  9          4.4         2.9          1.4         0.2 setosa 
+#&gt; 10          4.9         3.1          1.5         0.1 setosa 
+#&gt; # ... with 140 more rows, and 4 more variables:
+#&gt; #   Sepal.Length_min_rank &lt;int&gt;, Sepal.Width_min_rank &lt;int&gt;,
+#&gt; #   Sepal.Length_cume_dist &lt;dbl&gt;, Sepal.Width_cume_dist &lt;dbl&gt;</code></pre>
 </div>
 <div id="-tips" class="section level3">
 <h3>추가 Tips</h3>
@@ -89,11 +95,14 @@ slug: How_to_use_the_summarise_at_function
 <pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% 
   summarise_at(vars(starts_with(&quot;Sepal&quot;)), funs(min, mean, median, max))</code></pre>
 <pre><code>#&gt; # A tibble: 3 x 9
-#&gt;   Species    Sepal.Length_min Sepal… Sepal… Sepal… Sepa… Sepa… Sepa… Sepa…
-#&gt;   &lt;fctr&gt;                &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 setosa                 4.30   2.30   5.01   3.43  5.00  3.40  5.80  4.40
-#&gt; 2 versicolor             4.90   2.00   5.94   2.77  5.90  2.80  7.00  3.40
-#&gt; 3 virginica              4.90   2.20   6.59   2.97  6.50  3.00  7.90  3.80</code></pre>
+#&gt;   Species    Sepal.Length_min Sepal.Width_min Sepal.Length_mean
+#&gt;   &lt;fct&gt;                 &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;
+#&gt; 1 setosa                  4.3             2.3              5.01
+#&gt; 2 versicolor              4.9             2                5.94
+#&gt; 3 virginica               4.9             2.2              6.59
+#&gt; # ... with 5 more variables: Sepal.Width_mean &lt;dbl&gt;,
+#&gt; #   Sepal.Length_median &lt;dbl&gt;, Sepal.Width_median &lt;dbl&gt;,
+#&gt; #   Sepal.Length_max &lt;dbl&gt;, Sepal.Width_max &lt;dbl&gt;</code></pre>
 <p>함수 <code>starts_with()</code>와 함께 알아두면 좋을 함수는 다음과 같은 것들이 있다. 단, 이하 함수 군은 <code>select()</code>, <code>summarise_at()</code>, <code>mutate_at()</code> 함수 안에서만 사용할 수 있으니 주의해야 한다.</p>
 <table>
 <colgroup>

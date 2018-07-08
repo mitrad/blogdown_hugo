@@ -1,0 +1,140 @@
+---
+title: "rstan을 이용한 베이즈 회귀분석"
+date: 2018-07-08
+slug: bayesian-simple-regression-using-rstan
+categories:
+  - R
+tags:
+  - rstan
+  - regression
+  - bayesian
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = TRUE,
+  tidy = FALSE,
+  width = 60
+)
+
+options(digits = 3)
+```
+
+이번 포스트에서는 단순 회귀분석의 예를 통해 Stan과 rstan의 사용법을 알아본다. 실제로 R에서 Stan을 실행하여 MCMC 샘플을 얻어서 베이즈 신뢰구간 및 베이즈 예측구간을 계산한다. 
+
+## 데이터 분포 확인
+
+예제로 R에 포함된 `cars` 데이터를 이용한다. 이 데이터는 자동차의 속도 **speed (mph)**와 제동거리 **dist** 를 측정한 데이터로 50개의 관측값이 들어있다.
+
+```{r prompt=TRUE, message = FALSE, fig.align='center', fig.height=4, fig.width=6}
+library(tidyverse)
+ggplot(cars, aes(x = speed, y = dist)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  theme_minimal()
+```
+
+이 데이터의 산점도를 통해 자동차의 속도가 빠를수록 제동거리가 늘어나는 양의 상관관계가 존재하며 회귀분석에 적합한 데이터임을 알 수 있다.
+
+## 모형식의 기술
+
+단순회귀식은 다음과 같다.
+
+$$
+Y[n] = a + bX[n] + \epsilon[n],  \\
+\epsilon[n] \sim Normal(0, \sigma), ~~n = 1, \ldots, N
+$$
+
+이 식을 다른 형태로 변환하면 
+
+$$
+Y[n]  \sim Normal(a + bX[n], \sigma), ~~n = 1, \ldots, N
+$$
+로도 표현할 수 있다.
+
+## `lm` 함수를 이용한 추정
+
+```{r, prompt=TRUE}
+lm_model <- lm(dist ~ speed, data = cars)
+summary(lm_model)
+```
+
+
+```{r, message=FALSE, warning=FALSE, prompt=TRUE}
+library(rstan)
+library(ggmcmc)
+```
+
+## Rstan을 이용한 추정
+
+### Stan 코드 작성
+
+```{stan output.var='simple_reg'}
+data {
+  int N;
+  real X[N];
+  real Y[N];
+}
+parameters {
+  real a;
+  real b;
+  real<lower = 0> sigma;
+}
+model {
+  for (n in 1:N) {
+    Y[n] ~ normal(a + b * X[n], sigma);
+  }
+}
+```
+
+Stan 코드의 기본 구성은 `data`, `parameters`, `model` 3개의 블록으로 되어있다. `data` 블록에서는 관측 데이터를 선언하고 `parameters` 블록에는 샘플링하고 싶은 모수를 선언한다. `model` 블록에는 우도(likelihood)와 사전분포(prior distribution)를 기술한다. 
+
+예제 코드에서는 각 모수의 무정보 사전분포의 기술을 생략했다. 사전분포를 지정하지 않으면 Stan은 자동으로 제한된 범위 안에서 충분히 넓은 폭의 uniform 분포를 사용한다.
+
+Stan 코드는 1) 별도의 파일로 저장, 2) R 코드 안에서 정의, 3) [R Markdown 문서 안에 포함](https://rmarkdown.rstudio.com/authoring_knitr_engines.html%23sql#stan) 시키는 방법 등을 이용해 기술할 수 있다. 이 포스트에서는 3)을 이용해 **simple_reg**라는 이름의 `stanmodel` 객체로 컴파일한 결과를 R에 넘기는 방법을 사용했다.
+
+### R 코드의 구성
+
+```{r, message=FALSE, prompt=TRUE, eval = FALSE, echo = TRUE}
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+fit <- sampling(simple_reg,
+                data = list(N = nrow(cars), X = cars$speed, Y = cars$dist), 
+                seed = 34)
+save(fit, file = "rlt-simple-reg.RData")
+```
+
+함수 `sampling`은 컴파일된 `stanmodel`을 이용해 MCMC 샘플링을 실행한다. **fit**는 **stanfit** 이라는 클래스의 객체로 MCMC 설정과 추정결과물인 MCMC 샘플을 보존하고 있다. 때때로 MCMC 추정에 오랜 시간이 걸릴 경우도 있으니 추정된 샘플을 별도 파일로 저장하는 것을 추천한다.
+
+### RStan 결과
+
+```{r, prompt=TRUE}
+load("rlt-simple-reg.RData")
+class(fit)
+fit
+```
+예제 실행 후 얻어진 MCMC 샘플의 수는 **chains * (iteration - warmup) / thin** 으로 4 * (2000 - 1000) /1 = 40000 며, 위 출력의 6~15번째 줄이 샘플링한 각 모수에 대한 요약 통계치이다.
+
+요약 통계치의 첫번째 열은 모수의 이름이다. 
+Stan은 사후확률이 높은 곳을 효율적으로 탐색하기 위해 로그를 취한 사후확률 $\log p(\theta | Y) = \log p(Y|\theta) + \log p(\theta) + const$을 모수 $\theta$에 대해 편미분 한 값을 사용한다. 이를 위해 각 MCMC 스텝의 모수 $\theta^*$에 대한 $\log p(Y|\theta^*) + \log p(\theta^*)$의 값을 `lp__`(log posterior)라는 이름으로 내부에 저장한다. `lp__`도 다른 모수와 마찬가지로 수렴해야 한다.
+
+**maen**은 MCMC 샘플의 사후평균(posterior mean) 이며 이 값이 `lm` 함수를 이용하여 추정한 모수 값과 큰 차이가 없음을 확인할 수 있다. **se_eman**은 mean의 표준오차이며 MCMC 샘플의 분산을 n_eff로 나눈값이다. **sd**는 MCMC 샘플의 표준편차이다. **2.5%** ~ **97.5%**는 MCMC 샘플의 분위 수이며 베이즈 신뢰구간 혹은 베이즈 예측구간이다. **n_eff**는 Stan이 자기 상관(auto correlation) 등으로 부터 판단한 유효 MCMC 샘플의 수이다. 이 값이 작으면 모수가 수렴하기 어렵다는 것이므로 모형 개선이 필요하다는 힌트가 된다. 분포를 추정하거나 통계량을 산출하기 위해서는 적어도 100 이상의 값이 바람직하다. **Rhat**은 MCMC가 수렴했는가를 알려주는 지표로 "Chain 수가 3이상이며 모든 모수의 $Rhat < 1.1$ 이면 수렴했다 할 수 있다"라고 판단하며 모든 모수가 수렴할 때까지 모델 구축의 시행착오를 반복해야 한다. 자세한 것은 [Bayesian Data Analysis](http://www.stat.columbia.edu/~gelman/book/)를 참조.
+
+
+### 수렴진단 
+
+```{r, prompt=TRUE, fig.align='center', fig.height=6, fig.width=6}
+fit_ggs <- ggs(fit, stan_include_auxiliar = TRUE)
+ggs_traceplot(fit_ggs) +
+  theme_minimal()
+```
+
+`ggmcmc` 패키지는 trace plot을 이용한 수렴진단을 할 때 유용하다. `Rstan`에도 진단을 위한 그래픽 작성 함수가 포함되어 있지만, 모수가 많을 때 그래프를 통한 확인이 어려울 때가 있다. 함수 `ggs`는 **stanfit** 객체를 **data.frame**으로 변환하는 역할을 한다. 만약 warmup의 결과도 확인하고 싶다면 
+
+```{r, eval = F, prompt=TRUE}
+fit_ggs <- ggs(fit, inc_warmup = TRUE)
+```
+
+와 같이 기술한다. `stan_include_auxiliar = TRUE`는 `lp__`의 추정값을 추출하기 위한 옵션이다. 
