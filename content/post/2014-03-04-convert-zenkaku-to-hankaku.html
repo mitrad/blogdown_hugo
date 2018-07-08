@@ -16,12 +16,11 @@ draft: false
 <img src="/images/keyboard.png" />
 
 </div>
-<pre class="r"><code>&gt; library(Nippon)</code></pre>
-<pre><code>#&gt; Error in library(Nippon): there is no package called &#39;Nippon&#39;</code></pre>
-<pre class="r"><code>&gt; zen2han(&quot;１２３４５ＡＢＣ&quot;)</code></pre>
-<pre><code>#&gt; Error in zen2han(&quot;１２３４５ＡＢＣ&quot;): could not find function &quot;zen2han&quot;</code></pre>
+<pre class="r"><code>&gt; library(Nippon)
+&gt; zen2han(&quot;１２３４５ＡＢＣ&quot;)</code></pre>
+<pre><code>#&gt; [1] &quot;12345ABC&quot;</code></pre>
 <p>전각 반각이 섞여 있어도 전부 반각문자로 바꾸어 준다. 편리!!</p>
 <pre class="r"><code>&gt; # 3과 B가 반각, 나머지 전각문자
 &gt; zen2han(&quot;１２3４５ＡBＣ&quot;)</code></pre>
-<pre><code>#&gt; Error in zen2han(&quot;１２3４５ＡBＣ&quot;): could not find function &quot;zen2han&quot;</code></pre>
+<pre><code>#&gt; [1] &quot;12345ABC&quot;</code></pre>
 <p>전각 문자와 반각 문자에 대한 위키백과 설명은 <a href="http://ko.wikipedia.org/wiki/%EC%A0%84%EA%B0%81_%EB%AC%B8%EC%9E%90%EC%99%80_%EB%B0%98%EA%B0%81_%EB%AC%B8%EC%9E%90">여기</a></p>
