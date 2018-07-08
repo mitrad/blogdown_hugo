@@ -21,20 +21,19 @@ draft: false
 <p>먼저 sas7bdat 패키지를 R에 인스톨합니다.</p>
 <pre class="r"><code>&gt; install.packages(&quot;sas7bdat&quot;)</code></pre>
 <p>예를 들어 SAS에서 제공하는 예제 데이터 <code>cars.sas7bdat</code>를 R로 불러 오기 위해서는</p>
-<pre class="r"><code>&gt; library(sas7bdat)</code></pre>
-<pre><code>#&gt; Error in library(sas7bdat): there is no package called &#39;sas7bdat&#39;</code></pre>
-<pre class="r"><code>&gt; cars &lt;- read.sas7bdat(&quot;http://wsyang.com/files/cars.sas7bdat&quot;)</code></pre>
-<pre><code>#&gt; Error in read.sas7bdat(&quot;http://wsyang.com/files/cars.sas7bdat&quot;): could not find function &quot;read.sas7bdat&quot;</code></pre>
+<pre class="r"><code>&gt; library(sas7bdat)
+&gt; cars &lt;- read.sas7bdat(&quot;https://www.dropbox.com/s/fhymgehc12fxtmp/cars.sas7bdat?dl=1&quot;)</code></pre>
 <p>와 같이 함수 read.sas7bdat()를 이용하면 R의 데이터프레임 형식으로 변환시킬 수 있습니다.</p>
 <p>그 후엔 원하는 분석을 진행하면 되겠지요.</p>
 <pre class="r"><code>&gt; summary(cars)</code></pre>
-<pre><code>#&gt;      speed           dist    
-#&gt;  Min.   : 4.0   Min.   :  2  
-#&gt;  1st Qu.:12.0   1st Qu.: 26  
-#&gt;  Median :15.0   Median : 36  
-#&gt;  Mean   :15.4   Mean   : 43  
-#&gt;  3rd Qu.:19.0   3rd Qu.: 56  
-#&gt;  Max.   :25.0   Max.   :120</code></pre>
+<pre><code>#&gt;       MPG            CYL            ENG           WGT      
+#&gt;  Min.   : 9.0   Min.   :3.00   Min.   : 68   Min.   :1613  
+#&gt;  1st Qu.:17.0   1st Qu.:4.00   1st Qu.:105   1st Qu.:2225  
+#&gt;  Median :22.8   Median :4.00   Median :151   Median :2804  
+#&gt;  Mean   :23.4   Mean   :5.47   Mean   :194   Mean   :2978  
+#&gt;  3rd Qu.:29.0   3rd Qu.:8.00   3rd Qu.:276   3rd Qu.:3615  
+#&gt;  Max.   :46.6   Max.   :8.00   Max.   :455   Max.   :5140</code></pre>
 <pre class="r"><code>&gt; with(cars, summary(MPG))</code></pre>
-<pre><code>#&gt; Error in summary(MPG): object &#39;MPG&#39; not found</code></pre>
+<pre><code>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;     9.0    17.0    22.8    23.4    29.0    46.6</code></pre>
 <p>아직 대용량 데이터를 대상으로 써보지는 않았지만, SAS가 없어도 직접 sas7bdat 형식의 파일을 R에서 이용할 수 있다는 점에서 유용하게 사용할 수 있을듣 합니다.</p>

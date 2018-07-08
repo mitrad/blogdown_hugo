@@ -38,7 +38,7 @@ install.packages("sas7bdat")
 
 ```{r prompt=TRUE}
 library(sas7bdat)
-cars <- read.sas7bdat("http://wsyang.com/files/cars.sas7bdat")
+cars <- read.sas7bdat("https://www.dropbox.com/s/fhymgehc12fxtmp/cars.sas7bdat?dl=1")
 ```
 
 와 같이 함수 read.sas7bdat()를 이용하면 R의 데이터프레임 형식으로 변환시킬 수 있습니다.
